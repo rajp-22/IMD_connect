@@ -20,12 +20,14 @@ interface AdminChartsProps {
   monthlyTrends: { month: string; enrollments: number; completions: number }[];
   roleDistribution: { name: string; value: number; color: string }[];
   competencyAverages: { domain: string; average: number; benchmark: number }[];
+  coursePopularity?: { name: string; enrolled: number; rating: number }[];
 }
 
 export default function AdminCharts({
   monthlyTrends,
   roleDistribution,
   competencyAverages,
+  coursePopularity,
 }: AdminChartsProps) {
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">

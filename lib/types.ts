@@ -1,6 +1,6 @@
 export type UserRole = 'trainee' | 'trainer' | 'admin';
 export type UserStatus = 'pending' | 'approved' | 'rejected' | 'inactive';
-export type CompetencyLevel = 'Beginner' | 'Intermediate' | 'Advanced';
+export type CompetencyLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
 
 export interface IUser {
   _id: string;
@@ -42,6 +42,9 @@ export interface ITraineeProfile {
   skills: string[];
   interests: string[];
   completedCertificatesCount: number;
+  learningHours?: number;
+  learningStreakDays?: number;
+  badges?: string[];
   updatedAt: string;
 }
 
@@ -65,6 +68,8 @@ export interface ITrainerProfile {
   rating: number;
   totalCourses: number;
   totalStudentsTaught: number;
+  certifications?: string[];
+  coursesTaught?: string[];
 }
 
 export interface ILearningResource {
@@ -74,6 +79,7 @@ export interface ILearningResource {
   fileUrl: string;
   fileSize?: string;
   description?: string;
+  folder?: string;
 }
 
 export interface ILesson {
@@ -117,6 +123,7 @@ export interface IAssessment {
   durationMinutes: number;
   totalMarks: number;
   passingPercentage: number;
+  assessmentType?: 'pre' | 'post' | 'standard';
   startDate?: string;
   deadline?: string;
   questions: IQuestion[];
@@ -130,6 +137,7 @@ export interface IAssessmentAttempt {
   courseId: string;
   traineeId: string;
   traineeName: string;
+  assessmentType?: 'pre' | 'post' | 'standard';
   answers: {
     questionIndex: number;
     selectedOption: number;
@@ -160,6 +168,8 @@ export interface ICourse {
   tags: string[];
   modules: IModule[];
   assessmentId?: string;
+  preAssessmentId?: string;
+  prerequisites?: string[]; // course IDs or titles that must be completed
   enrolledCount: number;
   rating: number;
   ratingCount: number;
@@ -181,8 +191,12 @@ export interface IEnrollment {
   enrolledAt: string;
   completedAt?: string;
   lastAccessedAt: string;
+  preAssessmentScore?: number;
+  preAssessmentDate?: string;
   assessmentAttemptId?: string;
-  assessmentScore?: number;
+  assessmentScore?: number; // post-assessment score
+  postAssessmentDate?: string;
+  improvementPoints?: number; // e.g. +39
   certificateId?: string;
 }
 
@@ -198,7 +212,9 @@ export interface ICertificate {
   issueDate: string;
   completionDate: string;
   scorePercentage: number;
+  preScorePercentage?: number;
   verificationCode: string;
+  verificationUrl?: string;
 }
 
 export interface IFeedback {
@@ -207,7 +223,9 @@ export interface IFeedback {
   courseTitle: string;
   traineeId: string;
   traineeName: string;
+  trainerId?: string;
   rating: number;
+  trainerRating?: number;
   comments: string;
   createdAt: string;
 }
@@ -219,6 +237,9 @@ export interface ICompetency {
   description: string;
   category: string;
   icon: string;
+  requiredLevel: CompetencyLevel;
+  relatedCourses: string[];
+  relatedRoles: string[];
   targetBenchmark: number; // e.g. 75%
 }
 
@@ -230,6 +251,23 @@ export interface ITraineeCompetency {
   level: CompetencyLevel;
   score: number; // 0-100
   lastUpdated: string;
+}
+
+export interface IRoleCompetencyRequirement {
+  competencyName: string;
+  requiredScore: number; // 0-100
+  requiredLevel: CompetencyLevel;
+}
+
+export interface IRoleTemplate {
+  _id: string;
+  name: string; // e.g. "Weather Forecaster", "Radar Meteorologist", "Climate Research Analyst"
+  code: string;
+  department: string;
+  description: string;
+  requiredCompetencies: IRoleCompetencyRequirement[];
+  recommendedCourseIds: string[];
+  disclaimer: string;
 }
 
 export interface ISkillGap {
@@ -246,6 +284,45 @@ export interface ISkillGap {
     difficulty: string;
     duration: string;
   }[];
+  explanation?: string;
+}
+
+export interface ICourseRecommendation {
+  course: ICourse;
+  reasons: string[]; // transparent why: ["Addresses your Weather Forecasting skill gap (35%)", "Matches your target role: Weather Forecaster"]
+  matchScore: number;
+  gapCompetency?: string;
+  prerequisitesMet: boolean;
+}
+
+export interface ILearningPathStep {
+  id: string;
+  stepNumber: number;
+  courseId: string;
+  title: string;
+  description: string;
+  type: 'course' | 'assessment' | 'milestone';
+  duration: string;
+  status: 'completed' | 'in-progress' | 'current' | 'locked';
+  prerequisiteStepIds?: string[];
+  score?: number;
+  completedAt?: string;
+}
+
+export interface ILearningPath {
+  _id: string;
+  userId: string;
+  roleTemplateId?: string;
+  title: string;
+  goal: string;
+  targetRole: string;
+  progress: number; // 0-100%
+  estimatedDuration: string;
+  currentStep: number;
+  nextRecommendedStep: string;
+  steps: ILearningPathStep[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface ITrainerCompetencyMatch {
@@ -261,9 +338,138 @@ export interface ITrainerCompetencyMatch {
     level?: CompetencyLevel;
     score?: number;
   }[];
+  missingCompetencies: string[];
   matchScore: number; // Transparent percentage match e.g. 100% or 67%
   matchedCount: number;
   totalRequired: number;
+  certifications?: string[];
+  coursesPreviouslyTaught?: string[];
+}
+
+export interface IDepartmentSkillCell {
+  competencyName: string;
+  averageScore: number;
+  requiredScore: number;
+  gap: number;
+  employeeCount: number;
+  recommendedCourses: string[];
+}
+
+export interface IDepartmentSkillCoverage {
+  department: string;
+  totalEmployees: number;
+  competencies: IDepartmentSkillCell[];
+}
+
+export interface ITrainingImpactMetrics {
+  averagePreTestScore: number; // e.g. 48%
+  averagePostTestScore: number; // e.g. 79%
+  averageImprovement: number; // +31 points
+  completionRate: number; // e.g. 84%
+  totalLearningHours: number; // e.g. 1420
+  courseEngagementRate: number; // e.g. 91%
+  disclaimer: string;
+  courseBreakdown: {
+    courseId: string;
+    courseTitle: string;
+    preAvg: number;
+    postAvg: number;
+    improvement: number;
+    participants: number;
+    completionRate: number;
+  }[];
+  departmentBreakdown: {
+    department: string;
+    preAvg: number;
+    postAvg: number;
+    improvement: number;
+    completionRate: number;
+  }[];
+}
+
+export interface ITrainingEvent {
+  _id: string;
+  title: string;
+  description: string;
+  type: 'course_start' | 'live_session' | 'assessment_deadline' | 'workshop' | 'training_event' | 'cert_expiry';
+  date: string; // YYYY-MM-DD
+  time?: string;
+  courseId?: string;
+  courseTitle?: string;
+  targetRole?: 'all' | 'trainee' | 'trainer';
+  userId?: string;
+  locationOrLink?: string;
+}
+
+export interface ITrainerLibraryResource {
+  id: string;
+  trainerId: string;
+  folder: string; // e.g. "Weather Forecasting", "Satellite Meteorology"
+  title: string;
+  type: 'video' | 'pdf' | 'presentation' | 'document' | 'dataset';
+  fileName: string;
+  fileSize: string;
+  fileUrl: string;
+  uploadedAt: string;
+  usedInCourses: string[];
+}
+
+export interface ICompetencyPassport {
+  traineeId: string;
+  name: string;
+  department: string;
+  designation: string;
+  avatar?: string;
+  learningStreakDays: number;
+  totalLearningHours: number;
+  completedCoursesCount: number;
+  assessmentAverage: number;
+  verifiedCompetencies: {
+    name: string;
+    score: number;
+    level: CompetencyLevel;
+    verifiedDate: string;
+    verifiedBy: string;
+  }[];
+  certificates: {
+    certificateId: string;
+    courseName: string;
+    issueDate: string;
+    scorePercentage: number;
+    verificationCode: string;
+  }[];
+  milestones: {
+    badge: string;
+    title: string;
+    description: string;
+    achievedAt: string;
+  }[];
+}
+
+export interface IAICitation {
+  sourceDocument: string;
+  sectionTitle: string;
+  snippet: string;
+}
+
+export interface IAIMessage {
+  id: string;
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  timestamp: string;
+  citations?: IAICitation[];
+  suggestedFollowups?: string[];
+}
+
+export interface IAIConversation {
+  _id: string;
+  userId: string;
+  contextType: 'general' | 'course' | 'lesson' | 'assessment_review';
+  courseId?: string;
+  lessonId?: string;
+  title: string;
+  messages: IAIMessage[];
+  updatedAt: string;
 }
 
 export interface IAnnouncement {
@@ -283,6 +489,7 @@ export interface INotification {
   title: string;
   message: string;
   read: boolean;
+  type?: 'deadline' | 'competency_gap' | 'recommendation' | 'progress' | 'cert_expiry' | 'system';
   link?: string;
   createdAt: string;
 }

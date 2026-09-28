@@ -7,6 +7,13 @@ const CompetencySchema = new Schema(
     description: { type: String, required: true },
     category: { type: String, default: 'Core Meteorological Science' },
     icon: { type: String, default: 'Compass' },
+    requiredLevel: {
+      type: String,
+      enum: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
+      default: 'Intermediate',
+    },
+    relatedCourses: [{ type: String }],
+    relatedRoles: [{ type: String }],
     targetBenchmark: { type: Number, default: 75 },
   },
   { timestamps: true }
@@ -19,7 +26,7 @@ const TraineeCompetencySchema = new Schema(
     domain: { type: String, required: true },
     level: {
       type: String,
-      enum: ['Beginner', 'Intermediate', 'Advanced'],
+      enum: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
       default: 'Beginner',
     },
     score: { type: Number, min: 0, max: 100, default: 50 },
@@ -35,7 +42,7 @@ const TrainerCompetencySchema = new Schema(
     domain: { type: String, required: true },
     level: {
       type: String,
-      enum: ['Beginner', 'Intermediate', 'Advanced'],
+      enum: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
       default: 'Advanced',
     },
     score: { type: Number, min: 0, max: 100, default: 85 },
@@ -56,6 +63,7 @@ const SkillGapSchema = new Schema(
       default: 'Moderate',
     },
     recommendedCourseIds: [{ type: Schema.Types.ObjectId, ref: 'Course' }],
+    explanation: { type: String },
   },
   { timestamps: true }
 );

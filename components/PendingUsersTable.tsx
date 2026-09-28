@@ -5,11 +5,12 @@ import { Check, X, ShieldAlert, UserCheck, AlertCircle } from 'lucide-react';
 import { IUser } from '@/lib/types';
 
 interface PendingUsersTableProps {
-  initialUsers: IUser[];
+  initialUsers?: IUser[];
+  pendingUsers?: IUser[];
 }
 
-export default function PendingUsersTable({ initialUsers }: PendingUsersTableProps) {
-  const [users, setUsers] = useState<IUser[]>(initialUsers);
+export default function PendingUsersTable({ initialUsers, pendingUsers }: PendingUsersTableProps) {
+  const [users, setUsers] = useState<IUser[]>(pendingUsers || initialUsers || []);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
   const [actionMessage, setActionMessage] = useState<string | null>(null);
 

@@ -6,6 +6,8 @@ import { ICourse, IEnrollment } from '@/lib/types';
 interface CourseCardProps {
   course: ICourse;
   enrollment?: IEnrollment | null;
+  isEnrolled?: boolean;
+  enrollmentProgress?: number;
   onEnroll?: (courseId: string) => void;
   enrolling?: boolean;
 }
@@ -13,11 +15,17 @@ interface CourseCardProps {
 export default function CourseCard({
   course,
   enrollment,
+  isEnrolled,
+  enrollmentProgress,
   onEnroll,
   enrolling = false,
 }: CourseCardProps) {
-  const isCompleted = enrollment?.status === 'completed';
-  const isInProgress = enrollment?.status === 'in-progress' || (enrollment?.progressPercentage || 0) > 0;
+  const isCompleted = enrollment?.status === 'completed' || enrollmentProgress === 100;
+  const isInProgress =
+    isEnrolled ||
+    enrollment?.status === 'in-progress' ||
+    (enrollment?.progressPercentage || 0) > 0 ||
+    (enrollmentProgress || 0) > 0;
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-2xs hover:shadow-md transition flex flex-col justify-between group">

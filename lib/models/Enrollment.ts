@@ -15,8 +15,12 @@ const EnrollmentSchema = new Schema(
     enrolledAt: { type: Date, default: Date.now },
     completedAt: { type: Date },
     lastAccessedAt: { type: Date, default: Date.now },
+    preAssessmentScore: { type: Number },
+    preAssessmentDate: { type: Date },
     assessmentAttemptId: { type: Schema.Types.ObjectId, ref: 'AssessmentAttempt' },
     assessmentScore: { type: Number },
+    postAssessmentDate: { type: Date },
+    improvementPoints: { type: Number },
     certificateId: { type: String },
   },
   { timestamps: true }

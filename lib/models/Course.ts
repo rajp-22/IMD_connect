@@ -42,7 +42,7 @@ const CourseSchema = new Schema(
     category: { type: String, default: 'General Meteorology' },
     difficulty: {
       type: String,
-      enum: ['Beginner', 'Intermediate', 'Advanced'],
+      enum: ['Beginner', 'Intermediate', 'Advanced', 'Expert'],
       default: 'Beginner',
     },
     duration: { type: String, default: '4 Weeks' },
@@ -58,6 +58,8 @@ const CourseSchema = new Schema(
     tags: [{ type: String }],
     modules: [ModuleSchema],
     assessmentId: { type: Schema.Types.ObjectId, ref: 'Assessment' },
+    preAssessmentId: { type: Schema.Types.ObjectId, ref: 'Assessment' },
+    prerequisites: [{ type: String }],
     enrolledCount: { type: Number, default: 0 },
     rating: { type: Number, default: 4.8 },
     ratingCount: { type: Number, default: 0 },

@@ -21,6 +21,13 @@ import {
   Shield,
   Layers,
   Compass,
+  Calendar,
+  Bell,
+  GitFork,
+  Brain,
+  Grid3X3,
+  Target,
+  FileBadge,
 } from 'lucide-react';
 import { UserRole } from '@/lib/types';
 
@@ -33,18 +40,24 @@ interface SidebarProps {
 export default function Sidebar({ role, userName, designation }: SidebarProps) {
   const pathname = usePathname();
 
+  // Exactly 13 items as specified in user prompt
   const traineeLinks = [
     { name: 'Dashboard', href: '/trainee/dashboard', icon: LayoutDashboard },
     { name: 'My Profile', href: '/trainee/profile', icon: User },
-    { name: 'Courses', href: '/courses', icon: BookOpen },
     { name: 'My Learning', href: '/trainee/courses', icon: GraduationCap },
+    { name: 'Courses', href: '/courses', icon: BookOpen },
     { name: 'Assessments', href: '/trainee/assessments', icon: FileCheck2 },
-    { name: 'Certificates', href: '/trainee/certificates', icon: Award },
     { name: 'Competencies', href: '/trainee/competencies', icon: Compass },
+    { name: 'Learning Path', href: '/trainee/learning-path', icon: GitFork },
+    { name: 'Certificates', href: '/trainee/certificates', icon: Award },
+    { name: 'Competency Passport', href: '/trainee/passport', icon: FileBadge },
+    { name: 'Calendar', href: '/trainee/calendar', icon: Calendar },
+    { name: 'Capacity AI', href: '/trainee/ai', icon: Brain },
+    { name: 'Notifications', href: '/trainee/notifications', icon: Bell },
     { name: 'Feedback', href: '/trainee/feedback', icon: MessageSquare },
-    { name: 'Announcements', href: '/trainee/announcements', icon: Megaphone },
   ];
 
+  // Exactly 11 items as specified in user prompt
   const trainerLinks = [
     { name: 'Dashboard', href: '/trainer/dashboard', icon: LayoutDashboard },
     { name: 'My Profile', href: '/trainer/profile', icon: User },
@@ -54,9 +67,12 @@ export default function Sidebar({ role, userName, designation }: SidebarProps) {
     { name: 'Assessments', href: '/trainer/assessments', icon: FileCheck2 },
     { name: 'Trainees', href: '/trainer/trainees', icon: Users },
     { name: 'Competencies', href: '/trainer/competencies', icon: Compass },
+    { name: 'Trainer Matching', href: '/trainer/trainer-matching', icon: Target },
+    { name: 'Calendar', href: '/trainer/calendar', icon: Calendar },
     { name: 'Feedback', href: '/trainer/feedback', icon: MessageSquare },
   ];
 
+  // Exactly 14 items as specified in user prompt
   const adminLinks = [
     { name: 'Dashboard', href: '/admin/dashboard', icon: LayoutDashboard },
     { name: 'Users', href: '/admin/users', icon: Users },
@@ -64,10 +80,13 @@ export default function Sidebar({ role, userName, designation }: SidebarProps) {
     { name: 'Trainers', href: '/admin/trainers', icon: Award },
     { name: 'Courses', href: '/admin/courses', icon: BookOpen },
     { name: 'Assessments', href: '/admin/assessments', icon: FileCheck2 },
-    { name: 'Certificates', href: '/admin/certificates', icon: Award },
     { name: 'Competencies', href: '/admin/competencies', icon: Compass },
+    { name: 'Skill Heatmap', href: '/admin/heatmap', icon: Grid3X3 },
+    { name: 'Trainer Matching', href: '/admin/trainer-matching', icon: Target },
+    { name: 'Training Impact', href: '/admin/training-impact', icon: BarChart3 },
+    { name: 'Certificates', href: '/admin/certificates', icon: Award },
     { name: 'Announcements', href: '/admin/announcements', icon: Megaphone },
-    { name: 'Analytics', href: '/admin/analytics', icon: BarChart3 },
+    { name: 'Analytics', href: '/admin/analytics', icon: Layers },
     { name: 'Settings', href: '/admin/settings', icon: Sliders },
   ];
 
@@ -139,7 +158,7 @@ export default function Sidebar({ role, userName, designation }: SidebarProps) {
         </div>
       </div>
 
-      {/* Official Help & Support Footer */}
+      {/* Official Support Footer */}
       <div className="p-4 border-t border-slate-200 bg-slate-50/50">
         <div className="text-[11px] text-slate-500 space-y-1">
           <div className="flex items-center gap-1.5 font-semibold text-slate-700">

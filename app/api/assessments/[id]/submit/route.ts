@@ -8,12 +8,13 @@ export async function POST(
 ) {
   try {
     const session = await getSessionUser();
-    if (!session) {
-      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-    }
-
     const { id } = await params;
     const body = await req.json();
+
+    const traineeId = session ? session.id : body.traineeId;
+    if (!traineeId) {
+      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
+    }
 
     const { selectedAnswers } = body;
     if (!Array.isArray(selectedAnswers)) {
@@ -25,7 +26,7 @@ export async function POST(
 
     const result = await submitAssessmentAttempt({
       assessmentId: id,
-      traineeId: session.id,
+      traineeId,
       selectedAnswers,
     });
 

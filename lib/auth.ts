@@ -51,6 +51,8 @@ export async function getSessionUser(): Promise<ISessionUser | null> {
   }
 }
 
+export const getSession = getSessionUser;
+
 export async function setAuthCookie(user: ISessionUser): Promise<string> {
   const token = signToken(user);
   const cookieStore = await cookies();
