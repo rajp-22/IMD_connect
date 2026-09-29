@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   CloudSun,
@@ -21,9 +22,10 @@ import KnowledgeSearchModal from './KnowledgeSearchModal';
 
 interface HeaderProps {
   user?: ISessionUser | null;
+  revealOnScroll?: boolean;
 }
 
-export default function Header({ user }: HeaderProps) {
+export default function Header({ user, revealOnScroll = false }: HeaderProps) {
   const router = useRouter();
   const [showUserMenu, setShowUserMenu] = useState(false);
   const [showDemoSwitch, setShowDemoSwitch] = useState(false);
@@ -32,6 +34,21 @@ export default function Header({ user }: HeaderProps) {
   const [loggingOut, setLoggingOut] = useState(false);
   const [notifications, setNotifications] = useState<INotification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [isScrolled, setIsScrolled] = useState(!revealOnScroll);
+
+  // Scroll listener for revealOnScroll mode
+  useEffect(() => {
+    if (!revealOnScroll) return;
+
+    const handleScroll = () => {
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      setIsScrolled(scrollY > 80);
+    };
+
+    handleScroll();
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [revealOnScroll]);
 
   // Global Ctrl+K shortcut
   useEffect(() => {
@@ -112,37 +129,31 @@ export default function Header({ user }: HeaderProps) {
 
   return (
     <>
-      <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
-        {/* Top Gov Info Strip */}
-        <div className="bg-slate-900 text-slate-300 text-[13px] py-1.5 border-b border-slate-800/80">
-          <div className="portal-container flex items-center justify-between">
-            <div className="flex items-center space-x-3">
-              <span className="font-semibold text-white tracking-wide flex items-center gap-1.5">
-                <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-                भारत सरकार | Government of India
-              </span>
-              <span className="text-slate-500">|</span>
-              <span className="hidden sm:inline text-slate-300 font-medium">
-                पृथ्वी विज्ञान मंत्रालय | Ministry of Earth Sciences (MoES)
-              </span>
-            </div>
-            <div className="flex items-center gap-3">
-              <span className="text-[12px] text-slate-300 font-medium hidden md:inline">
-                भारत मौसम विज्ञान विभाग | IMD
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <div className="h-0.5 w-full bg-gradient-to-r from-orange-500 via-white to-emerald-600"></div>
-
+      <header
+        className={`z-50 transition-all duration-300 ease-in-out ${
+          revealOnScroll
+            ? `fixed top-0 inset-x-0 bg-white/95 backdrop-blur-md border-b border-slate-200/90 shadow-md ${
+                isScrolled
+                  ? 'translate-y-0 opacity-100 pointer-events-auto'
+                  : '-translate-y-full opacity-0 pointer-events-none'
+              }`
+            : 'sticky top-0 bg-white border-b border-slate-200 shadow-xs'
+        }`}
+      >
         {/* Main Navigation Header */}
         <div className="portal-container">
           <div className="flex items-center justify-between gap-3 h-16">
             {/* Brand Logo and Title */}
             <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
-              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-blue-900 text-white flex items-center justify-center shadow-md group-hover:bg-blue-800 transition shrink-0">
-                <CloudSun className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />
+              <div className="relative w-10 h-10 sm:w-11 sm:h-11 rounded-lg overflow-hidden bg-white flex items-center justify-center shadow-xs border border-slate-200 group-hover:border-blue-400 transition shrink-0 p-0.5">
+                <Image
+                  src="/logo.jpg"
+                  alt="MeghSetu Logo"
+                  width={44}
+                  height={44}
+                  className="object-contain w-full h-full"
+                  priority
+                />
               </div>
               <div className="shrink-0">
                 <div className="flex items-center gap-2">

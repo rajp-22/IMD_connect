@@ -31,7 +31,11 @@ import {
 
 export type WeatherLayer = 'temperature' | 'rainfall' | 'wind' | 'pressure' | 'cloud';
 
-export default function RealtimeIndiaWeatherMap() {
+interface RealtimeIndiaWeatherMapProps {
+  compact?: boolean;
+}
+
+export default function RealtimeIndiaWeatherMap({ compact = false }: RealtimeIndiaWeatherMapProps = {}) {
   const [weatherData, setWeatherData] = useState<IRealtimeWeatherResponse | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [selectedCity, setSelectedCity] = useState<ICityWeatherData | null>(null);
@@ -135,7 +139,7 @@ export default function RealtimeIndiaWeatherMap() {
   }, [weatherData, selectedCity]);
 
   return (
-    <div className="relative w-full h-full min-h-[580px] lg:min-h-[640px] flex flex-col justify-between select-none">
+    <div className="relative w-full flex flex-col select-none">
       {/* 1. TOP STATUS & CONTROLS BAR */}
       <div className="flex flex-wrap items-center justify-between gap-2.5 z-20 mb-2">
         {/* Status Indicator: Live or Demo */}
@@ -229,7 +233,7 @@ export default function RealtimeIndiaWeatherMap() {
 
       {/* 3. MAIN GEOGRAPHIC MAP VIEWPORT */}
       <div
-        className="relative flex-1 w-full rounded-2xl overflow-hidden border border-cyan-500/30 bg-gradient-to-b from-[#06172e]/90 via-[#071d3a]/80 to-[#041224]/95 shadow-2xl flex items-center justify-center"
+        className="relative w-full h-[460px] sm:h-[500px] rounded-2xl overflow-hidden border border-cyan-500/30 bg-gradient-to-b from-[#06172e]/90 via-[#071d3a]/80 to-[#041224]/95 shadow-2xl flex items-center justify-center"
         style={{ transform: `scale(${zoomLevel})`, transition: 'transform 0.25s ease-out' }}
       >
         {/* Lat/Long Grid overlay */}
@@ -238,7 +242,7 @@ export default function RealtimeIndiaWeatherMap() {
         {/* SVG GEOGRAPHIC OUTLINE & ATMOSPHERIC METEOROLOGY */}
         <svg
           viewBox="0 0 600 700"
-          className="w-full h-full max-h-[540px] drop-shadow-[0_0_20px_rgba(56,189,248,0.25)] select-none"
+          className="w-full h-full max-h-[480px] p-2 drop-shadow-[0_0_20px_rgba(56,189,248,0.25)] select-none"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
@@ -545,92 +549,92 @@ export default function RealtimeIndiaWeatherMap() {
 
       {/* 4. SELECTED CITY DETAILED TELEMETRY INSTRUMENTATION PANEL */}
       {defaultSelected && (
-        <div className="mt-3 bg-slate-950/90 backdrop-blur-xl border border-cyan-500/40 rounded-2xl p-4 shadow-xl text-white space-y-3">
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-800/80 pb-2.5">
+        <div className="mt-2.5 bg-slate-950/90 backdrop-blur-xl border border-cyan-500/30 rounded-xl p-2.5 sm:p-3 shadow-lg text-white space-y-2">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-1.5 border-b border-slate-800/80 pb-2">
             <div>
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                <h3 className="text-base sm:text-lg font-bold font-serif text-white tracking-wide">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+                <h3 className="text-xs sm:text-sm font-bold text-white tracking-wide">
                   {defaultSelected.name}, {defaultSelected.state}
                 </h3>
-                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/40">
+                <span className="text-[9px] font-mono font-semibold px-1.5 py-0.2 rounded bg-cyan-950 text-cyan-300 border border-cyan-500/40">
                   {defaultSelected.region}
                 </span>
               </div>
-              <p className="text-xs text-slate-400 mt-0.5">
-                {defaultSelected.condition} • Feels like {defaultSelected.feelsLike}°C
+              <p className="text-[11px] text-slate-400 mt-0.5">
+                {defaultSelected.condition} &bull; Feels like {defaultSelected.feelsLike}°C
               </p>
             </div>
 
             {/* Main Temperature Display */}
-            <div className="flex items-baseline gap-2 self-start sm:self-auto">
-              <span className="text-3xl sm:text-4xl font-extrabold font-mono text-cyan-300">
+            <div className="flex items-baseline gap-1.5 self-start sm:self-auto">
+              <span className="text-xl sm:text-2xl font-bold font-mono text-cyan-300">
                 {defaultSelected.temperature}°C
               </span>
-              <span className="text-[11px] text-slate-400 font-mono">
+              <span className="text-[10px] text-slate-400 font-mono">
                 {defaultSelected.observationTime}
               </span>
             </div>
           </div>
 
           {/* 6 Key Weather Instrument Readouts */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 text-xs">
+          <div className="grid grid-cols-3 sm:grid-cols-6 gap-1.5 text-xs">
             {/* Humidity */}
-            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
-                <Droplets className="w-3 h-3 text-cyan-400" /> Humidity
+            <div className="p-1.5 px-2 rounded-lg bg-slate-900/70 border border-slate-800 space-y-0.5">
+              <span className="text-[9px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
+                <Droplets className="w-2.5 h-2.5 text-cyan-400" /> Humidity
               </span>
-              <p className="text-base font-bold font-mono text-white">{defaultSelected.relativeHumidity}%</p>
+              <p className="text-xs font-semibold font-mono text-white">{defaultSelected.relativeHumidity}%</p>
             </div>
 
             {/* Wind */}
-            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
-                <Wind className="w-3 h-3 text-emerald-400" /> Wind Vector
+            <div className="p-1.5 px-2 rounded-lg bg-slate-900/70 border border-slate-800 space-y-0.5">
+              <span className="text-[9px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
+                <Wind className="w-2.5 h-2.5 text-emerald-400" /> Wind
               </span>
-              <p className="text-base font-bold font-mono text-white">
-                {defaultSelected.windSpeed} km/h{' '}
-                <span className="text-xs text-emerald-400">{defaultSelected.windDirectionCompass}</span>
+              <p className="text-xs font-semibold font-mono text-white">
+                {defaultSelected.windSpeed} <span className="text-[10px] text-slate-400">km/h</span>{' '}
+                <span className="text-[10px] text-emerald-400 font-normal">{defaultSelected.windDirectionCompass}</span>
               </p>
             </div>
 
             {/* Barometric Pressure */}
-            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
-                <Gauge className="w-3 h-3 text-blue-400" /> Pressure
+            <div className="p-1.5 px-2 rounded-lg bg-slate-900/70 border border-slate-800 space-y-0.5">
+              <span className="text-[9px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
+                <Gauge className="w-2.5 h-2.5 text-blue-400" /> Pressure
               </span>
-              <p className="text-base font-bold font-mono text-white">{defaultSelected.pressureMsl} hPa</p>
+              <p className="text-xs font-semibold font-mono text-white">{defaultSelected.pressureMsl} <span className="text-[10px] text-slate-400">hPa</span></p>
             </div>
 
             {/* Rainfall */}
-            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
-                <Droplets className="w-3 h-3 text-sky-400" /> Rainfall
+            <div className="p-1.5 px-2 rounded-lg bg-slate-900/70 border border-slate-800 space-y-0.5">
+              <span className="text-[9px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
+                <Droplets className="w-2.5 h-2.5 text-sky-400" /> Rain
               </span>
-              <p className="text-base font-bold font-mono text-white">{defaultSelected.precipitation} mm</p>
+              <p className="text-xs font-semibold font-mono text-white">{defaultSelected.precipitation} <span className="text-[10px] text-slate-400">mm</span></p>
             </div>
 
             {/* Cloud Cover */}
-            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
-                <Cloud className="w-3 h-3 text-slate-300" /> Cloud Cover
+            <div className="p-1.5 px-2 rounded-lg bg-slate-900/70 border border-slate-800 space-y-0.5">
+              <span className="text-[9px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
+                <Cloud className="w-2.5 h-2.5 text-slate-300" /> Cloud
               </span>
-              <p className="text-base font-bold font-mono text-white">{defaultSelected.cloudCover}%</p>
+              <p className="text-xs font-semibold font-mono text-white">{defaultSelected.cloudCover}%</p>
             </div>
 
             {/* Visibility */}
-            <div className="p-2.5 rounded-xl bg-slate-900/80 border border-slate-800 space-y-1">
-              <span className="text-[10px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
-                <Eye className="w-3 h-3 text-violet-400" /> Visibility
+            <div className="p-1.5 px-2 rounded-lg bg-slate-900/70 border border-slate-800 space-y-0.5">
+              <span className="text-[9px] uppercase font-bold text-slate-400 flex items-center gap-1 font-mono">
+                <Eye className="w-2.5 h-2.5 text-violet-400" /> Visibility
               </span>
-              <p className="text-base font-bold font-mono text-white">{defaultSelected.visibility} km</p>
+              <p className="text-xs font-semibold font-mono text-white">{defaultSelected.visibility} <span className="text-[10px] text-slate-400">km</span></p>
             </div>
           </div>
 
           {/* Source Attribution & Official Notice */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[10px] font-mono text-slate-400 pt-1 border-t border-slate-800/80">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between text-[9px] font-mono text-slate-500 pt-1 border-t border-slate-800/80">
             <span>Source: {weatherData?.source || 'Open-Meteo High-Resolution Numerical API'}</span>
-            <span>Refreshes dynamically every 5 minutes</span>
+            <span>Refreshes dynamically every 5 min</span>
           </div>
         </div>
       )}

@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import {
   CloudSun,
@@ -72,8 +73,15 @@ export default function RegisterPage() {
             {!registered ? (
               <>
                 <div className="text-center mb-6">
-                  <div className="w-12 h-12 rounded-xl bg-blue-950 text-amber-400 mx-auto flex items-center justify-center shadow-md mb-3">
-                    <CloudSun className="w-7 h-7" />
+                  <div className="w-16 h-12 rounded-xl bg-white border border-slate-200 mx-auto flex items-center justify-center shadow-xs p-1 mb-3">
+                    <Image
+                      src="/logo.jpg"
+                      alt="MeghSetu"
+                      width={64}
+                      height={40}
+                      className="object-contain"
+                      priority
+                    />
                   </div>
                   <h1 className="text-xl font-extrabold text-blue-950 font-serif">
                     New Personnel Registration

@@ -18,6 +18,13 @@ export const metadata: Metadata = {
   title: 'MeghSetu | India Meteorological Department (IMD)',
   description:
     'MeghSetu — Centralized Digital Learning Management and Organizational Capacity Building Portal for the India Meteorological Department (IMD) - Ministry of Earth Sciences, Government of India.',
+  icons: {
+    icon: [
+      { url: '/icon.png', type: 'image/png' },
+      { url: '/favicon.ico', sizes: 'any' },
+    ],
+    apple: '/icon.png',
+  },
 };
 
 export default function RootLayout({

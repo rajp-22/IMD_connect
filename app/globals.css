@@ -218,6 +218,30 @@ body {
   cursor: not-allowed;
 }
 
+/* Landing page demo access button */
+.landing-demo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.625rem 0.875rem;
+  font-size: 0.8125rem;
+  line-height: 1.25rem;
+  background-color: #ffffff;
+  border: 1px solid #d6d3d1;
+  border-radius: 0.5rem;
+  transition: border-color 150ms, background-color 150ms;
+  min-width: 10rem;
+}
+.landing-demo-btn:hover {
+  border-color: #0b2545;
+  background-color: #fafaf9;
+}
+.landing-demo-btn:focus-visible {
+  outline: 2px solid #0b2545;
+  outline-offset: 2px;
+}
+
 /* Institutional Status Badges (11-12px, weight 600-700) */
 .badge-status-completed {
   display: inline-flex;
@@ -586,4 +610,147 @@ body {
   .btn-demo-hover:hover {
     transform: none !important;
   }
+}
+
+/* ==========================================================================
+   LENIS FULL-PAGE SMOOTH SCROLLING & PARALLAX STYLES
+   ========================================================================== */
+
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+.parallax {
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+  background-color: #07192e;
+}
+
+.parallax__header {
+  position: relative;
+  height: 100vh;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.parallax__visuals {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.parallax__black-line-overflow {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: transparent;
+  z-index: 6;
+}
+
+.parallax__layers {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+.parallax__layer-img {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 125%;
+  object-fit: cover;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+.parallax__layer-title {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 4;
+  pointer-events: none;
+  will-change: transform;
+}
+
+.parallax__title {
+  font-size: clamp(3rem, 7.5vw, 6.25rem);
+  font-weight: 850;
+  letter-spacing: -0.03em;
+  color: #ffffff;
+  text-transform: uppercase;
+  text-shadow: 0 6px 30px rgba(0, 0, 0, 0.85);
+  line-height: 1.05;
+}
+
+.parallax__fade {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 24%;
+  background: linear-gradient(to bottom, transparent, #f7f6f3);
+  pointer-events: none;
+  z-index: 5;
+}
+
+.parallax__content {
+  position: relative;
+  z-index: 10;
+  padding: 3rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f7f6f3;
+}
+
+.osmo-credits {
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 0.75rem;
+  color: #94a3b8;
+  background-color: #07192e;
+}
+
+.osmo-credits__p {
+  margin: 0;
+}
+
+.osmo-credits__p-a {
+  color: #38bdf8;
+  text-decoration: underline;
+  transition: color 0.15s ease;
+}
+
+.osmo-credits__p-a:hover {
+  color: #7dd3fc;
 }
