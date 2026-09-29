@@ -137,9 +137,9 @@ export default async function CertificateVerificationPage({
                 className="text-xs font-semibold text-blue-900 hover:underline flex items-center gap-1.5"
               >
                 <CloudSun className="w-4 h-4" />
-                <span>Return to Capacity Connect Portal</span>
+                <span>Return to MeghSetu Portal</span>
               </Link>
-              <span className="text-[10px] text-slate-400 font-mono">CC-VER-V2.6</span>
+              <span className="text-[10px] text-slate-400 font-mono">MS-VER-V2.6</span>
             </div>
           </div>
         ) : (
@@ -149,7 +149,7 @@ export default async function CertificateVerificationPage({
             </div>
             <h1 className="text-xl font-bold text-slate-900">Certificate Verification Failed</h1>
             <p className="text-xs text-slate-500 max-w-md mx-auto">
-              No authentic credential found corresponding to code &ldquo;{id}&rdquo;. Please verify the QR code URL or contact the IMD Capacity Connect examination board.
+              No authentic credential found corresponding to code &ldquo;{id}&rdquo;. Please verify the QR code URL or contact the IMD MeghSetu examination board.
             </p>
             <div className="pt-4">
               <Link

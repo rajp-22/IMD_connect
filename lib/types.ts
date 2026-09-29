@@ -387,18 +387,92 @@ export interface ITrainingImpactMetrics {
   }[];
 }
 
+export type CalendarEventType =
+  | 'COURSE'
+  | 'TRAINING'
+  | 'ASSESSMENT'
+  | 'EXAM'
+  | 'ASSIGNMENT'
+  | 'DEADLINE'
+  | 'MEETING'
+  | 'WORKSHOP'
+  | 'CERTIFICATION'
+  | 'COMPETENCY'
+  | 'HOLIDAY'
+  | 'ADMINISTRATIVE'
+  | 'OTHER'
+  | 'course_start'
+  | 'live_session'
+  | 'assessment_deadline'
+  | 'workshop'
+  | 'cert_expiry'
+  | 'training_event';
+
+export type EventPriority = 'low' | 'medium' | 'high' | 'urgent';
+export type EventStatus = 'scheduled' | 'upcoming' | 'ongoing' | 'completed' | 'cancelled' | 'overdue';
+
 export interface ITrainingEvent {
   _id: string;
+  id?: string;
   title: string;
   description: string;
-  type: 'course_start' | 'live_session' | 'assessment_deadline' | 'workshop' | 'training_event' | 'cert_expiry';
+  type: CalendarEventType;
+  eventType?: CalendarEventType;
   date: string; // YYYY-MM-DD
   time?: string;
+  startDateTime?: string; // ISO string or 'YYYY-MM-DDTHH:mm'
+  endDateTime?: string; // ISO string or 'YYYY-MM-DDTHH:mm'
+  duration?: string;
+  location?: string;
+  locationOrLink?: string;
+  organizer?: {
+    id?: string;
+    name: string;
+    role?: string;
+    avatar?: string;
+  };
+  participants?: {
+    id?: string;
+    name: string;
+    role?: 'trainee' | 'trainer' | 'admin' | 'all';
+    cohort?: string;
+  }[];
+  targetRole?: 'all' | 'trainee' | 'trainer' | 'admin';
+  targetRoles?: ('all' | 'trainee' | 'trainer' | 'admin')[];
+  userId?: string;
   courseId?: string;
   courseTitle?: string;
-  targetRole?: 'all' | 'trainee' | 'trainer';
-  userId?: string;
-  locationOrLink?: string;
+  moduleId?: string;
+  moduleTitle?: string;
+  assessmentId?: string;
+  priority?: EventPriority;
+  status?: EventStatus;
+  completedUserIds?: string[];
+  reminderSettings?: {
+    enabled: boolean;
+    preset: '15m' | '30m' | '1h' | '1d' | '3d' | 'custom';
+    customMinutes?: number;
+  };
+  personalReminders?: {
+    userId: string;
+    note?: string;
+    remindBefore: string;
+  }[];
+  relatedResources?: {
+    title: string;
+    url: string;
+    type: string;
+  }[];
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ICalendarConflict {
+  conflictingEventId: string;
+  conflictingTitle: string;
+  conflictingTime: string;
+  conflictingDate: string;
+  reason: string;
 }
 
 export interface ITrainerLibraryResource {

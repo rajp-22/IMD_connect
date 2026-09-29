@@ -220,9 +220,9 @@ export default function AdminUsersPage() {
                         <button
                           onClick={() => handleUpdateStatus(u._id, 'approved')}
                           disabled={actionLoading === u._id}
-                          className="px-2.5 py-1 bg-emerald-700 hover:bg-emerald-600 text-white rounded text-[11px] font-bold shadow-2xs"
+                          className="btn-primary py-1 px-2.5 text-[11px] font-bold"
                         >
-                          Approve
+                          Sanction
                         </button>
                         <button
                           onClick={() => {
@@ -231,7 +231,7 @@ export default function AdminUsersPage() {
                             }
                           }}
                           disabled={actionLoading === u._id}
-                          className="px-2 py-1 bg-slate-100 hover:bg-red-50 text-slate-700 hover:text-red-700 rounded text-[11px] border border-slate-200"
+                          className="btn-secondary py-1 px-2 text-[11px] hover:text-red-700 hover:border-red-300"
                         >
                           Reject
                         </button>
@@ -244,7 +244,7 @@ export default function AdminUsersPage() {
                           }
                         }}
                         disabled={actionLoading === u._id}
-                        className="px-2.5 py-1 bg-slate-100 hover:bg-amber-50 text-slate-700 hover:text-amber-800 rounded text-[11px] font-medium border border-slate-200"
+                        className="btn-secondary py-1 px-2.5 text-[11px] text-slate-600 hover:text-amber-800 hover:border-amber-300"
                       >
                         Deactivate
                       </button>
@@ -252,7 +252,7 @@ export default function AdminUsersPage() {
                       <button
                         onClick={() => handleUpdateStatus(u._id, 'approved')}
                         disabled={actionLoading === u._id}
-                        className="px-2.5 py-1 bg-blue-100 hover:bg-blue-200 text-blue-900 rounded text-[11px] font-bold"
+                        className="btn-secondary py-1 px-2.5 text-[11px] text-blue-900 border-blue-200 hover:bg-blue-50"
                       >
                         Re-activate
                       </button>
@@ -262,6 +262,16 @@ export default function AdminUsersPage() {
               ))}
             </tbody>
           </table>
+
+          {filteredUsers.length === 0 && (
+            <div className="p-12 text-center text-slate-500">
+              <Users className="w-10 h-10 text-slate-300 mx-auto mb-2" />
+              <p className="text-sm font-semibold text-slate-800">No personnel records found</p>
+              <p className="text-xs text-slate-500 mt-0.5">
+                Try adjusting your search query or filter by different roles and statuses.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

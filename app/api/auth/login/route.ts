@@ -82,8 +82,10 @@ export async function POST(req: Request) {
   } catch (error: any) {
     console.error('Login error:', error);
     return NextResponse.json(
-      { error: error.message || 'An internal server error occurred.' },
+      { error: error?.message || 'An internal server error occurred.' },
       { status: 500 }
     );
   }
 }
+
+

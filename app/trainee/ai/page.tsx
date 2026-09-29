@@ -17,7 +17,7 @@ export default async function TraineeAIPage() {
           <div className="flex items-center gap-2">
             <Brain className="w-6 h-6 text-blue-900" />
             <h1 className="text-xl sm:text-2xl font-bold text-slate-900 font-serif">
-              Capacity AI — Learning Assistant
+              MeghSetu AI — Learning Assistant
             </h1>
           </div>
           <p className="text-xs text-slate-500 mt-1">

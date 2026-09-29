@@ -23,6 +23,15 @@ interface AdminChartsProps {
   coursePopularity?: { name: string; enrolled: number; rating: number }[];
 }
 
+const chartTooltipStyle = {
+  backgroundColor: '#0b2545',
+  border: '1px solid #1e3a8a',
+  borderRadius: '6px',
+  color: '#ffffff',
+  fontSize: '12px',
+  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
+};
+
 export default function AdminCharts({
   monthlyTrends,
   roleDistribution,
@@ -34,7 +43,7 @@ export default function AdminCharts({
       {/* Monthly Enrollments & Completions Trend */}
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
         <div className="mb-4">
-          <h3 className="text-sm font-bold text-slate-900">
+          <h3 className="text-sm font-bold text-slate-900 font-serif">
             Monthly Participation & Completion Trends
           </h3>
           <p className="text-[11px] text-slate-500">
@@ -44,16 +53,9 @@ export default function AdminCharts({
         <div className="h-64 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={monthlyTrends}>
-              <XAxis dataKey="month" tick={{ fontSize: 11 }} />
-              <YAxis tick={{ fontSize: 11 }} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#0f172a',
-                  color: '#fff',
-                  borderRadius: '8px',
-                  fontSize: '12px',
-                }}
-              />
+              <XAxis dataKey="month" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
+              <YAxis tick={{ fontSize: 11, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
+              <Tooltip contentStyle={chartTooltipStyle} />
               <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
               <Bar dataKey="enrollments" name="New Enrollments" fill="#1d4ed8" radius={[4, 4, 0, 0]} />
               <Bar dataKey="completions" name="Completed Graduations" fill="#0d9488" radius={[4, 4, 0, 0]} />
@@ -65,7 +67,7 @@ export default function AdminCharts({
       {/* Role Distribution Donut Chart */}
       <div className="bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
         <div className="mb-4">
-          <h3 className="text-sm font-bold text-slate-900">Platform User Distribution</h3>
+          <h3 className="text-sm font-bold text-slate-900 font-serif">Platform User Distribution</h3>
           <p className="text-[11px] text-slate-500">
             Composition of Trainees, Certified Instructors, and System Administrators
           </p>
@@ -89,14 +91,7 @@ export default function AdminCharts({
                   <Cell key={`cell-${index}`} fill={entry.color} />
                 ))}
               </Pie>
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#0f172a',
-                  color: '#fff',
-                  borderRadius: '8px',
-                  fontSize: '12px',
-                }}
-              />
+              <Tooltip contentStyle={chartTooltipStyle} />
             </PieChart>
           </ResponsiveContainer>
         </div>
@@ -105,7 +100,7 @@ export default function AdminCharts({
       {/* Competency Benchmarks vs Trainee Averages */}
       <div className="lg:col-span-2 bg-white p-5 rounded-xl border border-slate-200 shadow-2xs">
         <div className="mb-4">
-          <h3 className="text-sm font-bold text-slate-900">
+          <h3 className="text-sm font-bold text-slate-900 font-serif">
             Departmental Competency Averages vs Benchmark Standards
           </h3>
           <p className="text-[11px] text-slate-500">
@@ -115,16 +110,9 @@ export default function AdminCharts({
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={competencyAverages}>
-              <XAxis dataKey="domain" tick={{ fontSize: 10 }} interval={0} angle={-15} textAnchor="end" height={45} />
-              <YAxis tick={{ fontSize: 11 }} domain={[0, 100]} />
-              <Tooltip
-                contentStyle={{
-                  backgroundColor: '#0f172a',
-                  color: '#fff',
-                  borderRadius: '8px',
-                  fontSize: '12px',
-                }}
-              />
+              <XAxis dataKey="domain" tick={{ fontSize: 10, fill: '#64748b' }} interval={0} angle={-15} textAnchor="end" height={45} axisLine={{ stroke: '#cbd5e1' }} />
+              <YAxis tick={{ fontSize: 11, fill: '#64748b' }} domain={[0, 100]} axisLine={{ stroke: '#cbd5e1' }} />
+              <Tooltip contentStyle={chartTooltipStyle} />
               <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '8px' }} />
               <Bar dataKey="average" name="Cadre Average Score (%)" fill="#0b2545" radius={[4, 4, 0, 0]} />
               <Bar dataKey="benchmark" name="Required Standard (%)" fill="#d97706" radius={[4, 4, 0, 0]} />

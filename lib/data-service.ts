@@ -43,6 +43,7 @@ import {
   ITrainingImpactMetrics,
   IDepartmentSkillCoverage,
   ITrainingEvent,
+  ICalendarConflict,
   ITrainerLibraryResource,
   INotification,
   ICompetencyPassport,
@@ -122,7 +123,7 @@ function loadLocalStore(): DatabaseStore {
         parsed.learningPaths = [...SEED_LEARNING_PATHS];
         needsSave = true;
       }
-      if (!parsed.trainingEvents || parsed.trainingEvents.length === 0) {
+      if (!parsed.trainingEvents || parsed.trainingEvents.length < SEED_TRAINING_EVENTS.length) {
         parsed.trainingEvents = [...SEED_TRAINING_EVENTS];
         needsSave = true;
       }
@@ -207,10 +208,18 @@ export async function getUserById(id: string): Promise<IUser | null> {
 
 export async function getUserByEmail(email: string): Promise<IUser | null> {
   const store = loadLocalStore();
+  const searchEmail = email.toLowerCase().trim();
+  const alternateEmail = searchEmail.includes('@meghsetu.demo')
+    ? searchEmail.replace('@meghsetu.demo', '@capacityconnect.demo')
+    : searchEmail.includes('@capacityconnect.demo')
+    ? searchEmail.replace('@capacityconnect.demo', '@meghsetu.demo')
+    : searchEmail;
+
   return (
-    store.users.find(
-      (u) => u.email.toLowerCase().trim() === email.toLowerCase().trim()
-    ) || null
+    store.users.find((u) => {
+      const uEmail = u.email.toLowerCase().trim();
+      return uEmail === searchEmail || uEmail === alternateEmail;
+    }) || null
   );
 }
 
@@ -1451,37 +1460,241 @@ export async function getTrainingEvents(
   role?: string
 ): Promise<ITrainingEvent[]> {
   const store = loadLocalStore();
-  let events = store.trainingEvents;
-  if (role) {
-    events = events.filter((e) => e.targetRole === 'all' || e.targetRole === role);
+  let events = store.trainingEvents || [];
+
+  // If role is specified and not admin, filter by targetRoles/targetRole
+  if (role && role !== 'admin') {
+    events = events.filter((e) => {
+      // 1. Direct role match
+      if (e.targetRoles && Array.isArray(e.targetRoles)) {
+        if (e.targetRoles.includes('all') || e.targetRoles.includes(role as any)) return true;
+      }
+      if (e.targetRole === 'all' || e.targetRole === role) return true;
+
+      // 2. Direct organizer match (trainer who created it)
+      if (role === 'trainer' && (e.organizer?.id === userId || e.userId === userId)) return true;
+
+      // 3. Direct participant match (trainee participant)
+      if (e.participants && e.participants.some((p) => p.id === userId || p.role === 'all' || p.role === role)) {
+        return true;
+      }
+
+      // 4. Trainee specific event
+      if (role === 'trainee' && e.userId === userId) return true;
+
+      return false;
+    });
   }
-  if (userId) {
-    events = events.filter((e) => !e.userId || e.userId === userId);
+
+  // Sort chronological by date then time
+  return events.sort((a, b) => {
+    const timeA = a.startDateTime || `${a.date}T${(a.time || '00:00').slice(0, 5)}`;
+    const timeB = b.startDateTime || `${b.date}T${(b.time || '00:00').slice(0, 5)}`;
+    return new Date(timeA).getTime() - new Date(timeB).getTime();
+  });
+}
+
+export function detectCalendarConflicts(
+  newEvent: Partial<ITrainingEvent>,
+  existingEvents: ITrainingEvent[]
+): ICalendarConflict[] {
+  const conflicts: ICalendarConflict[] = [];
+  if (!newEvent.date || !newEvent.time) return conflicts;
+
+  const parseTimeSpan = (timeStr: string) => {
+    // e.g. "10:00 AM – 12:00 PM IST" or "10:00 AM - 12:00 PM"
+    const match = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)\s*[-–]\s*(\d{1,2}):(\d{2})\s*(AM|PM)/i);
+    if (!match) return null;
+    let h1 = parseInt(match[1], 10);
+    const m1 = parseInt(match[2], 10);
+    const p1 = match[3].toUpperCase();
+    if (p1 === 'PM' && h1 < 12) h1 += 12;
+    if (p1 === 'AM' && h1 === 12) h1 = 0;
+
+    let h2 = parseInt(match[4], 10);
+    const m2 = parseInt(match[5], 10);
+    const p2 = match[6].toUpperCase();
+    if (p2 === 'PM' && h2 < 12) h2 += 12;
+    if (p2 === 'AM' && h2 === 12) h2 = 0;
+
+    return { start: h1 * 60 + m1, end: h2 * 60 + m2 };
+  };
+
+  const newSpan = parseTimeSpan(newEvent.time);
+  if (!newSpan) return conflicts;
+
+  for (const existing of existingEvents) {
+    if (newEvent._id && existing._id === newEvent._id) continue;
+    if (existing.date !== newEvent.date) continue;
+    if (existing.status === 'cancelled') continue;
+
+    const existSpan = parseTimeSpan(existing.time || '');
+    if (!existSpan) continue;
+
+    // Check overlap: StartA < EndB and EndA > StartB
+    if (newSpan.start < existSpan.end && newSpan.end > existSpan.start) {
+      // Check if organizer or trainer matches or if both are mandatory trainee sessions
+      const sameOrganizer =
+        newEvent.organizer?.id &&
+        existing.organizer?.id &&
+        newEvent.organizer.id === existing.organizer.id;
+
+      const sameCourse =
+        newEvent.courseId &&
+        existing.courseId &&
+        newEvent.courseId === existing.courseId;
+
+      const bothAssessments =
+        ['ASSESSMENT', 'EXAM'].includes(newEvent.type as string) &&
+        ['ASSESSMENT', 'EXAM'].includes(existing.type as string);
+
+      if (sameOrganizer || sameCourse || bothAssessments || newEvent.targetRole === existing.targetRole) {
+        conflicts.push({
+          conflictingEventId: existing._id,
+          conflictingTitle: existing.title,
+          conflictingTime: existing.time || '',
+          conflictingDate: existing.date,
+          reason: sameOrganizer
+            ? `Faculty (${newEvent.organizer?.name || 'Trainer'}) is already assigned during this slot.`
+            : bothAssessments
+            ? `Overlapping assessment / examination window.`
+            : `Time window overlaps with scheduled event "${existing.title}".`,
+        });
+      }
+    }
   }
-  return events.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+
+  return conflicts;
 }
 
 export async function createTrainingEvent(
   event: Partial<ITrainingEvent>
-): Promise<ITrainingEvent> {
+): Promise<{ event: ITrainingEvent; conflicts: ICalendarConflict[] }> {
   const store = loadLocalStore();
+  const allEvents = store.trainingEvents || [];
+  const conflicts = detectCalendarConflicts(event, allEvents);
+
+  const eventType = event.eventType || event.type || 'TRAINING';
   const newEvent: ITrainingEvent = {
     _id: `evt_${Date.now()}`,
-    title: event.title || 'Training Event',
+    id: `evt_${Date.now()}`,
+    title: event.title || 'MeghSetu Event',
     description: event.description || '',
-    type: event.type || 'training_event',
+    type: eventType,
+    eventType: eventType,
     date: event.date || new Date().toISOString().split('T')[0],
-    time: event.time || '10:00 AM - 12:00 PM IST',
+    time: event.time || '10:00 AM – 12:00 PM IST',
+    startDateTime: event.startDateTime || (event.date ? `${event.date}T10:00:00` : undefined),
+    endDateTime: event.endDateTime || (event.date ? `${event.date}T12:00:00` : undefined),
+    duration: event.duration || '2 Hours',
+    location: event.location || event.locationOrLink || 'IMD Complex / Webex Room',
+    locationOrLink: event.locationOrLink || event.location || 'IMD Complex / Webex Room',
+    organizer: event.organizer || {
+      name: 'IMD Directorate',
+      role: 'Administration',
+    },
+    participants: event.participants || [
+      { name: 'All Trainees', role: 'trainee' },
+    ],
+    targetRole: event.targetRole || 'all',
+    targetRoles: event.targetRoles || (event.targetRole ? [event.targetRole] : ['trainee', 'trainer', 'admin']),
+    userId: event.userId,
     courseId: event.courseId,
     courseTitle: event.courseTitle,
-    targetRole: event.targetRole || 'all',
-    userId: event.userId,
-    locationOrLink: event.locationOrLink || 'IMD Auditorium / Virtual Webex',
+    moduleId: event.moduleId,
+    moduleTitle: event.moduleTitle,
+    assessmentId: event.assessmentId,
+    priority: event.priority || 'medium',
+    status: event.status || 'upcoming',
+    completedUserIds: event.completedUserIds || [],
+    reminderSettings: event.reminderSettings || {
+      enabled: true,
+      preset: eventType === 'DEADLINE' || eventType === 'ASSIGNMENT' ? '1d' : '30m',
+    },
+    personalReminders: event.personalReminders || [],
+    relatedResources: event.relatedResources || [],
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
   };
 
   store.trainingEvents.push(newEvent);
   saveLocalStore(store);
-  return newEvent;
+  return { event: newEvent, conflicts };
+}
+
+export async function updateTrainingEvent(
+  id: string,
+  updates: Partial<ITrainingEvent>
+): Promise<ITrainingEvent | null> {
+  const store = loadLocalStore();
+  const index = store.trainingEvents.findIndex((e) => e._id === id || e.id === id);
+  if (index === -1) return null;
+
+  store.trainingEvents[index] = {
+    ...store.trainingEvents[index],
+    ...updates,
+    updatedAt: new Date().toISOString(),
+  };
+
+  saveLocalStore(store);
+  return store.trainingEvents[index];
+}
+
+export async function deleteTrainingEvent(id: string): Promise<boolean> {
+  const store = loadLocalStore();
+  const initialLen = store.trainingEvents.length;
+  store.trainingEvents = store.trainingEvents.filter((e) => e._id !== id && e.id !== id);
+  if (store.trainingEvents.length !== initialLen) {
+    saveLocalStore(store);
+    return true;
+  }
+  return false;
+}
+
+export async function toggleEventCompletion(
+  eventId: string,
+  userId: string
+): Promise<{ completed: boolean; event: ITrainingEvent } | null> {
+  const store = loadLocalStore();
+  const evt = store.trainingEvents.find((e) => e._id === eventId || e.id === eventId);
+  if (!evt) return null;
+
+  evt.completedUserIds = evt.completedUserIds || [];
+  const idx = evt.completedUserIds.indexOf(userId);
+  let completed = false;
+  if (idx > -1) {
+    evt.completedUserIds.splice(idx, 1);
+    completed = false;
+  } else {
+    evt.completedUserIds.push(userId);
+    completed = true;
+  }
+
+  saveLocalStore(store);
+  return { completed, event: evt };
+}
+
+export async function addPersonalReminder(
+  eventId: string,
+  userId: string,
+  remindBefore: string,
+  note?: string
+): Promise<ITrainingEvent | null> {
+  const store = loadLocalStore();
+  const evt = store.trainingEvents.find((e) => e._id === eventId || e.id === eventId);
+  if (!evt) return null;
+
+  evt.personalReminders = evt.personalReminders || [];
+  // replace or append
+  const existingIdx = evt.personalReminders.findIndex((r) => r.userId === userId);
+  if (existingIdx > -1) {
+    evt.personalReminders[existingIdx] = { userId, remindBefore, note };
+  } else {
+    evt.personalReminders.push({ userId, remindBefore, note });
+  }
+
+  saveLocalStore(store);
+  return evt;
 }
 
 /* ========================================================

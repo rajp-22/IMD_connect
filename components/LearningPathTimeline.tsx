@@ -11,7 +11,7 @@ import {
   Target,
   Sparkles,
   Award,
-  ChevronRight,
+  ChevronDown,
 } from 'lucide-react';
 import { ILearningPath, ILearningPathStep } from '@/lib/types';
 
@@ -24,45 +24,61 @@ export default function LearningPathTimeline({
   learningPath,
   onAdvanceStep,
 }: LearningPathTimelineProps) {
-  const getStepIcon = (status: ILearningPathStep['status']) => {
+  const getStepNode = (status: ILearningPathStep['status'], idx: number) => {
     switch (status) {
       case 'completed':
-        return <CheckCircle2 className="w-5 h-5 text-emerald-600 fill-emerald-100" />;
+        return (
+          <div className="w-8 h-8 rounded-full bg-emerald-100 border-2 border-emerald-600 text-emerald-700 flex items-center justify-center font-bold text-xs shadow-xs z-10">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+          </div>
+        );
       case 'current':
-        return <CircleDot className="w-5 h-5 text-blue-700 animate-pulse fill-blue-100" />;
+        return (
+          <div className="w-8 h-8 rounded-full bg-blue-950 border-2 border-amber-400 text-white flex items-center justify-center font-bold text-xs shadow-md z-10 animate-pulse">
+            <CircleDot className="w-4 h-4 text-amber-400" />
+          </div>
+        );
       case 'in-progress':
-        return <ArrowRight className="w-5 h-5 text-amber-600" />;
+        return (
+          <div className="w-8 h-8 rounded-full bg-amber-100 border-2 border-amber-500 text-amber-800 flex items-center justify-center font-bold text-xs shadow-xs z-10">
+            <span className="font-mono">{idx + 1}</span>
+          </div>
+        );
       case 'locked':
       default:
-        return <Lock className="w-4 h-4 text-slate-400" />;
+        return (
+          <div className="w-8 h-8 rounded-full bg-slate-100 border-2 border-slate-300 text-slate-400 flex items-center justify-center font-bold text-xs z-10">
+            <Lock className="w-3.5 h-3.5 text-slate-400" />
+          </div>
+        );
     }
   };
 
   const getStepBadge = (status: ILearningPathStep['status']) => {
     switch (status) {
       case 'completed':
-        return 'bg-emerald-50 text-emerald-800 border-emerald-300';
+        return 'badge-status-completed';
       case 'current':
-        return 'bg-blue-50 text-blue-900 border-blue-300 font-bold';
+        return 'badge-status-active font-bold';
       case 'in-progress':
-        return 'bg-amber-50 text-amber-800 border-amber-300';
+        return 'badge-status-pending';
       case 'locked':
       default:
-        return 'bg-slate-100 text-slate-500 border-slate-200';
+        return 'badge-status-locked';
     }
   };
 
   return (
     <div className="bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden">
       {/* Path Goal Header */}
-      <div className="p-6 bg-gradient-to-r from-blue-950 via-blue-900 to-indigo-950 text-white">
+      <div className="p-6 sm:p-8 bg-gradient-to-r from-blue-950 via-slate-900 to-blue-900 text-white">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <div className="space-y-1">
+          <div className="space-y-1.5">
             <div className="flex items-center gap-2">
-              <span className="text-[10px] uppercase font-mono tracking-wider bg-white/10 px-2 py-0.5 rounded text-amber-300 border border-white/20">
-                Personalized Learning Sequence
+              <span className="text-[10px] uppercase font-mono tracking-wider bg-white/10 px-2.5 py-0.5 rounded text-amber-300 border border-white/20 font-bold">
+                Government Learning Roadmap
               </span>
-              <span className="text-xs text-blue-200">Target: {learningPath.targetRole}</span>
+              <span className="text-xs text-blue-200">Target Role: <strong>{learningPath.targetRole}</strong></span>
             </div>
             <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-white font-serif">
               {learningPath.title}
@@ -73,14 +89,14 @@ export default function LearningPathTimeline({
             </p>
           </div>
 
-          <div className="bg-white/10 p-3.5 rounded-xl border border-white/15 text-center sm:min-w-[140px] shrink-0">
+          <div className="bg-white/10 p-4 rounded-xl border border-white/15 text-center sm:min-w-[150px] shrink-0 backdrop-blur-xs">
             <div className="text-2xl font-extrabold text-amber-400 font-mono">
               {learningPath.progress}%
             </div>
             <div className="text-[10px] text-blue-200 uppercase tracking-wider font-semibold">
-              Journey Progress
+              Roadmap Progress
             </div>
-            <div className="w-full bg-white/20 h-1.5 rounded-full mt-2 overflow-hidden">
+            <div className="w-full bg-white/20 h-1.5 rounded-full mt-2.5 overflow-hidden">
               <div
                 className="bg-amber-400 h-full rounded-full transition-all duration-500"
                 style={{ width: `${learningPath.progress}%` }}
@@ -101,86 +117,101 @@ export default function LearningPathTimeline({
             </span>
           </div>
           <div>
-            Next Recommended Step:{' '}
+            Next Recommended Milestone:{' '}
             <strong className="text-amber-300">{learningPath.nextRecommendedStep}</strong>
           </div>
         </div>
       </div>
 
-      {/* Sequential Steps List */}
-      <div className="p-6 divide-y divide-slate-100">
+      {/* Connected Journey Sequence */}
+      <div className="p-6 sm:p-8 space-y-0 relative">
         {learningPath.steps.map((step, idx) => {
-          const isLocked = step.status === 'locked';
+          const isLast = idx === learningPath.steps.length - 1;
+          const isCurrent = step.status === 'current';
 
           return (
-            <div
-              key={step.id}
-              className={`py-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 transition-colors ${
-                step.status === 'current'
-                  ? 'bg-blue-50/50 p-4 rounded-xl border border-blue-200 my-2'
-                  : 'hover:bg-slate-50/70'
-              }`}
-            >
-              <div className="flex items-start gap-3.5">
-                <div className="pt-0.5 shrink-0">{getStepIcon(step.status)}</div>
-                <div className="space-y-0.5">
-                  <div className="flex items-center gap-2">
-                    <span className="text-xs font-bold text-slate-800">{step.title}</span>
-                    <span
-                      className={`text-[10px] font-semibold px-2 py-0.5 rounded-full border capitalize ${getStepBadge(
-                        step.status
-                      )}`}
-                    >
-                      {step.status === 'completed'
-                        ? 'Completed'
-                        : step.status === 'current'
-                        ? 'Current Step'
-                        : step.status === 'in-progress'
-                        ? 'In Progress'
-                        : 'Prerequisite Locked'}
-                    </span>
-                    {step.score !== undefined && (
-                      <span className="text-[10px] font-mono font-bold text-emerald-700 bg-emerald-100 px-1.5 py-0.2 rounded">
-                        Score: {step.score}%
+            <div key={step.id} className="relative flex items-start gap-4 pb-8 group">
+              {/* Connecting vertical line & downward arrow indicator */}
+              {!isLast && (
+                <div className="absolute left-4 top-8 -bottom-2 w-0.5 bg-slate-200 flex flex-col justify-end items-center">
+                  <ChevronDown className="w-3 h-3 text-slate-400 -mb-1 bg-white" />
+                </div>
+              )}
+
+              {/* Node Indicator */}
+              <div className="shrink-0">{getStepNode(step.status, idx)}</div>
+
+              {/* Step Card Content */}
+              <div
+                className={`flex-1 p-4 sm:p-5 rounded-xl border transition-all ${
+                  isCurrent
+                    ? 'bg-blue-50/60 border-blue-300 shadow-xs'
+                    : 'bg-white border-slate-200/90 hover:border-slate-300 shadow-2xs'
+                }`}
+              >
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="space-y-1">
+                    <div className="flex items-center gap-2 flex-wrap">
+                      <span className="text-xs font-mono font-bold text-slate-400">
+                        Step {idx + 1}
+                      </span>
+                      <h4 className="text-sm font-bold text-slate-900 font-serif">
+                        {step.title}
+                      </h4>
+                      <span className={`text-[10px] font-semibold px-2 py-0.5 rounded font-mono ${getStepBadge(step.status)}`}>
+                        {step.status === 'completed'
+                          ? 'Completed ✓'
+                          : step.status === 'current'
+                          ? 'Current Step ●'
+                          : step.status === 'in-progress'
+                          ? 'In Progress ⏳'
+                          : 'Prerequisite Locked 🔒'}
+                      </span>
+                      {step.score !== undefined && (
+                        <span className="text-[10px] font-mono font-bold text-emerald-800 bg-emerald-100 px-1.5 py-0.2 rounded border border-emerald-200">
+                          Score: {step.score}%
+                        </span>
+                      )}
+                    </div>
+                    <p className="text-xs text-slate-600 max-w-2xl leading-relaxed">
+                      {step.description}
+                    </p>
+                    <div className="text-[11px] text-slate-400 flex items-center gap-3 pt-1">
+                      <span>Duration: {step.duration}</span>
+                      <span>•</span>
+                      <span className="capitalize">{step.type}</span>
+                      {step.completedAt && (
+                        <>
+                          <span>•</span>
+                          <span>Passed on {new Date(step.completedAt).toLocaleDateString()}</span>
+                        </>
+                      )}
+                    </div>
+                  </div>
+
+                  {/* Action Button */}
+                  <div className="shrink-0 self-start sm:self-center">
+                    {step.status === 'completed' ? (
+                      <span className="text-xs font-semibold text-emerald-700 flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 rounded-lg border border-emerald-200">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                        <span>Mastered</span>
+                      </span>
+                    ) : step.status === 'current' || step.status === 'in-progress' ? (
+                      <Link
+                        href={`/courses/${step.courseId}`}
+                        className="btn-primary py-2 px-3.5 text-xs font-semibold"
+                      >
+                        <span>Continue Step</span>
+                        <ArrowRight className="w-3.5 h-3.5" />
+                      </Link>
+                    ) : (
+                      <span className="text-xs text-slate-400 flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 rounded-lg border border-slate-200">
+                        <Lock className="w-3.5 h-3.5" />
+                        <span>Prerequisite Locked</span>
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 max-w-xl">{step.description}</p>
-                  <div className="text-[11px] text-slate-400 flex items-center gap-2 pt-0.5">
-                    <span>Duration: {step.duration}</span>
-                    <span>•</span>
-                    <span className="capitalize">{step.type}</span>
-                    {step.completedAt && (
-                      <>
-                        <span>•</span>
-                        <span>Completed on {new Date(step.completedAt).toLocaleDateString()}</span>
-                      </>
-                    )}
-                  </div>
                 </div>
-              </div>
-
-              {/* Action Button */}
-              <div className="shrink-0 pl-8 sm:pl-0">
-                {step.status === 'completed' ? (
-                  <span className="text-xs font-semibold text-emerald-700 flex items-center gap-1">
-                    <CheckCircle2 className="w-4 h-4" />
-                    Passed
-                  </span>
-                ) : step.status === 'current' || step.status === 'in-progress' ? (
-                  <Link
-                    href={`/courses/${step.courseId}`}
-                    className="px-3.5 py-1.5 bg-blue-900 hover:bg-blue-800 text-white rounded-lg text-xs font-semibold shadow-xs flex items-center gap-1.5 transition"
-                  >
-                    <span>Continue Step</span>
-                    <ArrowRight className="w-3.5 h-3.5" />
-                  </Link>
-                ) : (
-                  <span className="text-xs text-slate-400 flex items-center gap-1">
-                    <Lock className="w-3.5 h-3.5" />
-                    Locked
-                  </span>
-                )}
               </div>
             </div>
           );

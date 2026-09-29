@@ -135,20 +135,22 @@ export default function TrainingImpactAnalyticsView({
         <div className="h-72 w-full">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={chartData} margin={{ top: 20, right: 30, left: 0, bottom: 20 }}>
-              <CartesianGrid strokeDasharray="3 3" stroke="#F1F5F9" />
-              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#475569' }} />
-              <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#475569' }} unit="%" />
+              <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
+              <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} />
+              <YAxis domain={[0, 100]} tick={{ fontSize: 11, fill: '#64748b' }} axisLine={{ stroke: '#cbd5e1' }} unit="%" />
               <Tooltip
                 contentStyle={{
-                  backgroundColor: '#FFFFFF',
-                  borderColor: '#E2E8F0',
-                  borderRadius: '0.5rem',
+                  backgroundColor: '#0b2545',
+                  border: '1px solid #1e3a8a',
+                  borderRadius: '6px',
+                  color: '#ffffff',
                   fontSize: '12px',
+                  boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)',
                 }}
               />
-              <Legend wrapperStyle={{ fontSize: '12px', paddingTop: '10px' }} />
-              <Bar dataKey="Pre-Test" fill="#94A3B8" radius={[4, 4, 0, 0]} />
-              <Bar dataKey="Post-Test" fill="#1E3A8A" radius={[4, 4, 0, 0]} />
+              <Legend wrapperStyle={{ fontSize: '11px', paddingTop: '10px' }} />
+              <Bar dataKey="Pre-Test" fill="#94a3b8" radius={[4, 4, 0, 0]} />
+              <Bar dataKey="Post-Test" fill="#0b2545" radius={[4, 4, 0, 0]} />
             </BarChart>
           </ResponsiveContainer>
         </div>

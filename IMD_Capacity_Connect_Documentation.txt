@@ -1,0 +1,506 @@
+================================================================================
+           INDIA METEOROLOGICAL DEPARTMENT (IMD) - MEGHSETU
+             LEARNING INTELLIGENCE & CAPACITY BUILDING PLATFORM
+               COMPREHENSIVE IMPLEMENTATION & WORKFLOW SUMMARY
+================================================================================
+
+Document Title: IMD MeghSetu - Platform Architecture, Features & Workflows
+Target Audience: Department Directorate, System Administrators, Trainers & Trainees
+System Context: Ministry of Earth Sciences (MoES), Government of India
+Generated Date: September 2026
+
+--------------------------------------------------------------------------------
+TABLE OF CONTENTS
+--------------------------------------------------------------------------------
+1. Executive Overview & Mission
+2. Architecture, Stack & Design System
+3. User Roles & Access Control
+4. Core Platform Features (Features 1 to 22)
+5. End-to-End Operational Workflows
+   - Trainee Operational Workflow
+   - Trainer / Faculty Workflow
+   - Administrator & Executive Workflow
+   - Public Credential Verification Workflow
+6. UI/UX, Design Consistency & Polish Implementation
+7. Repository Directory Structure & Component Map
+8. Future Scalability & Compliance Guidelines
+
+================================================================================
+1. EXECUTIVE OVERVIEW & MISSION
+================================================================================
+IMD MeghSetu is an institutional, role-based competency intelligence 
+and capacity-building digital platform specifically architected for the 
+India Meteorological Department (IMD), Ministry of Earth Sciences (MoES).
+
+The platform transforms institutional training from ad-hoc seminar attendance 
+into a deterministic, transparent, and data-backed competency management 
+ecosystem. It serves three vital user cadres:
+1. Operational Trainees & Forecasters (upskilling, diagnostic assessments, certifications)
+2. Certified Faculty & Trainers (curriculum authoring, progress supervision, matching)
+3. Directorate & Training Administrators (nationwide station analytics, skill heatmaps,
+   cadre sanctioning, impact assessment)
+
+Key Value Pillars:
+- Zero-Hallucination Technical Grounding: Context-bound pedagogical AI.
+- Deterministic Evaluation: Objective pre-test vs. post-test quantifiable gains.
+- Transparent Skill Gap Diagnostics: Explaining exactly WHY a course is recommended.
+- Authentic Digital Credentials: Verifiable certificates with QR code verification.
+- Official Government Visual Language: Clean, dignified, institutional aesthetic.
+
+================================================================================
+2. ARCHITECTURE, STACK & DESIGN SYSTEM
+================================================================================
+
+Technology Stack:
+--------------------------------------------------------------------------------
+- Framework: Next.js 16 (App Router with server-side rendering and dynamic routing)
+- Runtime: React 19
+- Language: TypeScript (Strict typing across models, API responses, and components)
+- Styling: Tailwind CSS v4 with custom institutional CSS design system tokens
+- Charts: Recharts (Standardized institutional dark-navy tooltip and color palette)
+- Icons: Lucide React (Official government and technical metadata iconography)
+- Visualization: Custom SVG Knowledge Graphs, Radar Charts, Heatmaps, Dual Bar Gauges
+- Storage Fallback: Multi-provider abstraction (S3 / Cloudinary / Supabase / Local Fallback)
+- Authentication: Session-based cookie verification with zero-friction Demo Switcher
+
+Design System & Aesthetics:
+--------------------------------------------------------------------------------
+- Visual Identity: Government institutional identity reflecting IMD MoES official portal.
+- Primary Colors:
+  * Institutional Deep Navy: #0b2545
+  * Dark Navy: #061a31
+  * Government Blue: #134074 / #1d4ed8
+  * Neutral Slate: Slate-50, Slate-100, Slate-200, Slate-700, Slate-900
+  * Crisp White: #ffffff
+- Standardized Status Badges:
+  * Completed / Verified / Success: Emerald / Green (.badge-status-completed)
+  * Active / Informational: Government Blue (.badge-status-active)
+  * Pending / Attention: Amber / Warm Gold (.badge-status-pending)
+  * Critical / Error: Crimson / Red (.badge-status-error)
+  * Locked / Disabled: Slate / Muted Gray (.badge-status-locked)
+- Typography:
+  * Serif Headings: High-prestige serif font for page titles, certificates, and credentials
+  * Sans-Serif Body: Clear, high-legibility sans for data tables, metrics, and navigation
+  * Monospace: Precise font for Certificate IDs, timestamps, formulas, and percentages
+- Component Polish:
+  * Consistent card border radiuses (rounded-xl) with subtle border-slate-200
+  * Standardized input controls (.input-gov) with focused ring states
+  * Four-tier button hierarchy (.btn-primary, .btn-secondary, .btn-ghost, .btn-destructive)
+  * Skeleton loaders (.skeleton-pulse) preventing layout shift during fetches
+
+================================================================================
+3. USER ROLES & ACCESS CONTROL
+================================================================================
+
+The platform enforces strict role-based views and navigation:
+
+1. Trainee Cadre (Forecasters, Scientific Assistants, Weather Observers):
+   - Access to: Trainee Dashboard, Course Catalog, Course Player, Assessments,
+     Competency Passport, Skill Gap Visualizer, Notifications, Personal Profile.
+   - Persona Example: Pooja Iyer (Scientific Assistant-I, RMC Mumbai).
+
+2. Trainer Cadre (Senior Faculty, Operational Meteorologists):
+   - Access to: Trainer Dashboard, Course Authoring Studio, Trainee Roster Tracking,
+     Assessment Performance, Competency Matching Profile, Training Calendar.
+   - Persona Example: Dr. Rajesh Sharma (Senior Faculty, NWP Division, IMD HQ).
+
+3. Administrator Cadre (Directorate, Training Heads, HR Cadre Officers):
+   - Access to: Executive Directorate Overview, Training Statistics Grid, 
+     Department Competency Coverage Heatmap, Training Impact Analytics, 
+     User Role Approvals & Sanctions Table, Certificate Registry Ledger.
+   - Persona Example: Dr. Mrutyunjay Mohapatra (Director General of Meteorology).
+
+Global Demo Switcher:
+- Header dropdown enables instant one-click preview switching between Trainee, 
+  Trainer, and Admin contexts with auto-session provisioning for evaluation.
+
+================================================================================
+4. CORE PLATFORM FEATURES (DETAILED BREAKDOWN)
+================================================================================
+
+FEATURE 1: Competency Intelligence Engine & Scoring
+- Tracks 10 core meteorological domains: Weather Forecasting, Meteorology, Data Analysis,
+  Python, Satellite Meteorology, Climate Science, Numerical Weather Prediction (NWP),
+  Radar Meteorology, Tropical Meteorology, Instrumentation.
+- Scores range from 0 to 100% across four capability levels: Beginner, Intermediate, 
+  Advanced, and Expert.
+- Objective algorithmic scoring tied to pre-tests, lesson completions, and final exams.
+
+FEATURE 2: Role-Based Competency Matrix Comparison
+- Cadre benchmark templates (e.g., Lead Forecaster [WF-CORE], Satellite Specialist [SAT-SPEC],
+  Climate Data Analyst [CLI-SPEC], Radar Meteorologist [RAD-SPEC]).
+- Dynamic comparison between user's current score and official cadre requirement.
+- Automatic Role Readiness metric calculation (e.g., 68% role readiness for Forecaster).
+
+FEATURE 3: Smart Skill Gap Visualizer & Remedial Recommendations
+- Formula: Skill Gap = Required Standard - Current Score.
+- Status categorization: Critical Gap (>30%), Moderate Gap (15-30%), Satisfied (<15%).
+- Direct one-click remedial course call-to-action [Start Learning] targeted specifically 
+  to address the deficiency.
+
+FEATURE 4: Transparent "Why" Recommendation Engine
+- Never recommends a course blindly.
+- Displays transparent justification chips, e.g.:
+  * "Addresses your Weather Forecasting skill gap (35%)"
+  * "Direct prerequisite for Lead Forecaster role"
+  * "Matches your interest in Computational GIS"
+- Displays match scores (e.g., 94% Match) and prerequisite fulfillment status.
+
+FEATURE 5: Multi-Modal Learning Path & Interactive Timeline
+- Connects curriculum milestones in a clear sequential journey.
+- Visual state indicators: Completed (Green Checkmark), Active (Pulsing Blue Ring),
+  Upcoming (Slate Ring), and Locked (Padlock Icon with prerequisite requirements).
+- Prevents skipping foundational atmospheric physics before advanced nowcasting.
+
+FEATURE 6 & 7: Baseline Diagnostic Pre-Assessments & Post-Test Certification Exams
+- Pre-Assessment: Taken before course unlock to capture incoming baseline knowledge.
+- Post-Assessment: Taken after completing all syllabus modules.
+- Timed examination engine with question steppers, multiple choice, and immediate
+  score breakdown with physical scientific explanations.
+- Automatic calculation of Net Point Gain (e.g., Pre 42% -> Post 81% = +39 pts gain).
+
+FEATURE 8: Curriculum & Course Player Studio
+- Recommended structured layout:
+  Course Header -> Description -> Progress Gauge -> Curriculum Syllabus -> 
+  Downloadable Learning Resources -> Evaluation Assessments -> Trainer Credentials.
+- Supports multi-format content: Articles, Interactive Text, Video Lectures, and PDF Guides.
+- Mark as Complete tracking with auto-updating progress bar.
+
+FEATURE 9: Real-time In-Document Q&A Bar
+- Embedded directly within each lesson module.
+- Allows trainees to query specific questions against the active lesson syllabus text.
+- Grounded strictly in the provided scientific text without hallucinations.
+
+FEATURE 10: Departmental Competency Coverage Heatmap (Admin)
+- Matrix visualization of 5 key IMD departments (NWFC, RMC Mumbai, Satellite Division,
+  AWS Network, Climatology Pune) across 5 core technical competencies.
+- Color-coded cell thresholds: Green (>=70% Satisfied), Amber (55-69% Moderate Gap),
+  Red (<55% Critical Gap).
+- Interactive drill-down modal on cell click showing staff headcount, average score,
+  required score, gap breakdown, and remedial course deployment button.
+
+FEATURE 11: Department Training Insights & Priority Skill Gaps
+- Automated institutional aggregation listing top 5 nationwide skill gaps.
+- Displays affected personnel headcount and course demand indexes.
+- Allows administrators to assign remedial training cohorts nationwide.
+
+FEATURE 12: Training Impact Analytics (Pre vs. Post Gains)
+- Quantifiable ROI metrics on training programs across 20 regional meteorological stations.
+- Key KPIs: Average Improvement (+23.6 pts), Course Completion Rate (84.2%), Total Learning
+  Hours (1,840 hrs), and Course Engagement Rate (91.8%).
+- Recharts visual bar chart comparing Pre-Test vs. Post-Test outcomes per course.
+
+FEATURE 13: Deterministic Trainer Matching Tool
+- Algorithmic matching of course prerequisites with verified faculty competency scores.
+- Selectable required competencies (Meteorology, Radar, Python, Satellite, etc.).
+- Ranks available trainers with match percentage (e.g., 88% Match), experience years,
+  official star rating, and competency checklist breakdown.
+
+FEATURE 14: Centralized Digital Certificate Registry
+- Secure registry of all certificates issued across the department.
+- Cryptographic unique identifier: e.g., IMD-CERT-2026-000128.
+- Contains trainee name, cadre designation, curriculum, trainer, exam score, and issue date.
+
+FEATURE 15: Public QR Code Verification Portal (/verify/[id])
+- Independent verification route for credential authenticity.
+- Scanned via QR code or manual identifier input.
+- Displays official verification banner with Government of India and MoES header,
+  confirming official record on the IMD Central Capacity Verification Ledger.
+
+FEATURE 16: Competency Passport (/trainee/passport)
+- Dignified official credential document for cadre officers.
+- Summarizes total training hours, courses completed, examination average, verified
+  competencies, registered professional certificates, and institutional milestones.
+
+FEATURE 17: Interactive Knowledge & Competency Graph
+- SVG-rendered interactive graph linking core meteorological domains, syllabus topics,
+  and competency prerequisites.
+- Node inspection reveals connected courses, cadre requirements, and difficulty levels.
+
+FEATURE 18: Integrated MeghSetu AI Pedagogical Console
+- Institutional assistant with context awareness (active course/lesson context indicator).
+- One-click prompt chips:
+  * "Explain this concept"
+  * "Summarize this lesson"
+  * "Create practice questions"
+  * "What should I learn next?"
+- Authorized citation blocks and clean pedagogical formatting.
+
+FEATURE 19: Global Grouped Knowledge Search Modal
+- Accessible via global shortcut (Ctrl+K / Cmd+K) or header search bar.
+- Groups search results into distinct categorized sections:
+  * COURSES
+  * LEARNING MATERIAL & HANDBOOKS
+  * LESSONS & SYLLABUS TOPICS
+  * COMPETENCIES & BENCHMARKS
+  * ASSESSMENTS & EXAMS
+
+FEATURE 20: National Training Calendar & Scheduling
+- Integrated view of live Webex training sessions, assessment deadlines, course batch
+  starts, national workshops, and certificate validity expiries.
+- Filterable by event category with direct session links.
+
+FEATURE 21: Early Warning & Support Signal Engine
+- Proactively flags trainees with low pre-test scores (<50%) or stagnant module progress.
+- Alerts both the trainee and the assigned trainer with remedial recommendations.
+
+FEATURE 22: Gamification & Institutional Qualification Badges
+- Replaces informal gaming badges with dignified professional qualification milestones:
+  * "Synoptic Analysis Specialist"
+  * "Radar Echo Interpreter"
+  * "AWS Maintenance Certification"
+  * "Numerical Model Analyst"
+
+================================================================================
+5. END-TO-END OPERATIONAL WORKFLOWS
+================================================================================
+
+WORKFLOW 1: TRAINEE LEARNING & CERTIFICATION WORKFLOW
+--------------------------------------------------------------------------------
+1. Sign In & Identity Selection:
+   - Trainee signs in via login page or selects "Trainee Demo" from Demo Switcher.
+   - Redirected to Trainee Dashboard (/trainee/dashboard).
+
+2. Dashboard Triage:
+   - Trainee inspects the prioritized dashboard:
+     * Card 1: Continue Learning (resumes Weather Forecasting Fundamentals).
+     * Card 2: Recommended Courses (reviews transparent match reasons).
+     * Card 3: Skill Gaps (observes 35% gap in Weather Forecasting).
+     * Card 4: Learning Path Timeline (observes current node in path).
+
+3. Taking the Diagnostic Pre-Assessment:
+   - Trainee launches pre-test before starting course modules.
+   - Answers 5 diagnostic MCQs within the timed runner.
+   - Baseline diagnostic score (e.g., 42%) is recorded to user profile.
+
+4. Studying Lessons & In-Document Q&A:
+   - Enters Course Player (/courses/[id]).
+   - Reads atmospheric thermodynamic principles and lesson notes.
+   - Queries the Document Q&A Bar: "What is the adiabatic lapse rate?"
+   - Receives grounded explanation extracted directly from lesson text.
+   - Clicks "Mark Lesson as Completed" to advance syllabus progress bar.
+
+5. Final Certification Examination:
+   - Upon completing all modules, trainee unlocks the final certification exam.
+   - Completes evaluation questions within the timed assessment runner.
+   - Scores 81% (passing benchmark: 70%).
+   - Net gain of +39 points is computed and recorded.
+
+6. Certificate Issuance & QR Verification:
+   - Passing triggers celebratory verification dialog.
+   - Digital Certificate is minted with unique ID (e.g., IMD-CERT-2026-000128).
+   - Trainee can preview, print, or scan the verification QR code.
+   - Credential is added to the Trainee's Competency Passport.
+
+
+WORKFLOW 2: TRAINER / FACULTY CURRICULUM & SUPERVISION WORKFLOW
+--------------------------------------------------------------------------------
+1. Faculty Access:
+   - Trainer logs in or switches to "Trainer Demo" (Dr. Rajesh Sharma).
+   - Lands on Trainer Dashboard (/trainer/dashboard).
+
+2. Reviewing Active Curricula:
+   - Inspects authored courses with live enrolled headcount.
+   - Reviews Trainee Progress roster to identify students falling behind.
+
+3. Evaluating Training Outcomes:
+   - Reviews pre-test vs. post-test evaluation metrics across batches.
+   - Observes average class improvement from 45% baseline to 82% post-test.
+
+4. Authoring a New Course (/trainer/courses/create):
+   - Opens the 7-step Course Creation Studio:
+     * Step 1: Course Info (Title, Category, Difficulty, Duration, Competency Domain).
+     * Step 2: Modules Hierarchy (Add modules and assign order).
+     * Step 3: Lessons & Lectures (Add lesson text, articles, slides, or video links).
+     * Step 4: Upload Study Materials (Attach PDF manuals with safe storage fallback).
+     * Step 5: Author MCQ Assessment (Set questions, options, correct answers, explanations).
+     * Step 6: Preview Curriculum Summary.
+     * Step 7: Confirm & Publish to MongoDB / In-Memory Store.
+
+5. Competency Matching Assignment:
+   - Trainer inspects Trainer Matching Tool (/trainer/trainer-matching).
+   - Verifies their faculty profile rating (4.9/5.0) and domain competencies.
+
+
+WORKFLOW 3: ADMINISTRATOR & DIRECTORATE GOVERNANCE WORKFLOW
+--------------------------------------------------------------------------------
+1. Executive Oversight:
+   - Administrator logs in or switches to "Admin Demo" (Dr. M. Mohapatra).
+   - Lands on Admin Dashboard (/admin/dashboard).
+
+2. Reviewing Nationwide Statistics:
+   - Inspects 6 key executive metrics: Total Users (30), Active Trainees (18),
+     Certified Trainers (7), Courses Catalog (5), Enrollments (42), Certificates (14).
+   - Analyzes monthly enrollment vs. completion bar trends and role donut charts.
+
+3. Departmental Competency Coverage Analysis:
+   - Navigates to Skill Heatmap (/admin/heatmap).
+   - Identifies critical red cells (e.g., Satellite Division in Python: 52%).
+   - Clicks cell to open drill-down modal showing 6 affected staff members.
+   - Clicks "Deploy Remedial Course" to assign training intervention.
+
+4. Quantifying Training ROI:
+   - Opens Training Impact Analytics (/admin/training-impact).
+   - Reviews net improvement (+23.6 pts) across 20 regional stations.
+   - Exports/verifies course-by-course and department-by-department breakdowns.
+
+5. Managing Personnel Sanctions & Role Approvals:
+   - Reviews Pending Users Table (/admin/users).
+   - Approves newly registered officers into Forecaster or Trainer cadres.
+
+
+WORKFLOW 4: PUBLIC CREDENTIAL VERIFICATION WORKFLOW
+--------------------------------------------------------------------------------
+1. Verification Trigger:
+   - Third-party agency, regional station, or officer scans QR code on certificate.
+   - QR code resolves to: https://capacityconnect.imd.gov.in/verify/CC-2026-000128.
+
+2. Ledger Query:
+   - System queries MongoDB / in-memory store by verificationCode.
+   - If found:
+     * Displays green verified banner: "Certificate Verified Authentic ✓"
+     * Shows Trainee Name, Certified Course, Trainer, Issue Date, Authority.
+     * Displays IMD MoES official header strip and privacy-compliance notice.
+   - If invalid code:
+     * Displays clear verification failure state with retry assistance.
+
+================================================================================
+6. UI/UX, DESIGN CONSISTENCY & POLISH IMPLEMENTATION
+================================================================================
+
+Comprehensive Audit & Improvements Completed:
+--------------------------------------------------------------------------------
+1. Design Language Preservation:
+   - Eliminated neon colors, gaming aesthetics, and excessive gradients.
+   - Enforced dignified Government of India institutional styling throughout.
+
+2. Navigation Vertical Alignment:
+   - Standardized all controls in the Header to a precise h-9 height.
+   - Logo, Title, Search bar, AI Assistant, Notifications, Demo Switcher, and
+     Profile Avatar are vertically aligned across desktop and mobile viewports.
+
+3. Mobile Viewport Responsiveness:
+   - Tested and formatted across 375px, 390px, 430px, 768px, and 1280px+ breakpoints.
+   - Added collapsible mobile portal bar in Sidebar to prevent mobile content occlusion.
+   - Added horizontal scroll wrappers to tables, heatmaps, and chart containers.
+
+4. Consistent Card Layout:
+   - Standardized cards with rounded-xl border border-slate-200, subtle 2xs shadows,
+     and uniform internal padding.
+
+5. Course Player Hierarchy Enforcement:
+   - Standardized Course Detail layout into the exact recommended flow:
+     Course Header -> Description -> Progress -> Syllabus Modules -> 
+     Downloadable Materials -> Assessments -> Trainer Credentials.
+
+6. Visual Competency & Skill Gap Gauges:
+   - Designed scannable Current vs. Required dual bars with percentage labels,
+     status tags, and immediate remedial action buttons.
+
+7. Unified Chart Styling:
+   - Standardized Recharts tooltips to institutional dark navy (#0b2545) with crisp
+     subtle borders, consistent legend sizes, and unified color palette.
+
+8. Forms & Inputs Standardization:
+   - Implemented .input-gov utility class across Login, Register, and Course Studio.
+   - Consistent focus rings (ring-1 ring-blue-900), label font weights, and required indicators.
+
+9. Error, Empty & Loading States:
+   - Replaced blank screens with .skeleton-pulse loaders.
+   - Replaced generic "No data" with friendly, contextual empty states and CTAs.
+
+10. TypeScript Verification:
+   - Compiled entire project with "npx tsc --noEmit" resulting in 0 errors.
+
+================================================================================
+7. REPOSITORY DIRECTORY STRUCTURE & COMPONENT MAP
+================================================================================
+
+IMD/
+├── app/
+│   ├── (auth)/
+│   │   ├── login/page.tsx               # Institutional Gov Sign In & Demo Accounts
+│   │   └── register/page.tsx            # Cadre Registration Portal
+│   ├── admin/
+│   │   ├── certificates/page.tsx        # Central Registry of Digital Credentials
+│   │   ├── dashboard/page.tsx           # Prioritized Executive Directorate Dashboard
+│   │   ├── heatmap/page.tsx             # Competency Coverage Heatmap
+│   │   ├── training-impact/page.tsx     # Pre vs Post Assessment Analytics
+│   │   ├── users/page.tsx               # Personnel Approvals & Cadre Sanctions
+│   │   └── layout.tsx                   # Admin Role Route Guard & Layout
+│   ├── courses/
+│   │   ├── [id]/page.tsx                # Course Detail & Syllabus Route
+│   │   └── page.tsx                     # Public National Course Catalog
+│   ├── trainee/
+│   │   ├── assessments/page.tsx         # Pre & Post Assessment Runner Hub
+│   │   ├── competencies/page.tsx        # Competency Intelligence & Role Matrix
+│   │   ├── courses/page.tsx             # My Enrolled Learning Modules
+│   │   ├── dashboard/page.tsx           # Prioritized Trainee Learning Dashboard
+│   │   ├── notifications/page.tsx       # Institutional Alerts & Deadlines
+│   │   ├── passport/page.tsx            # Digital Competency Passport View
+│   │   ├── profile/page.tsx             # Trainee 8-Section Professional Profile
+│   │   └── layout.tsx                   # Trainee Route Guard & Layout
+│   ├── trainer/
+│   │   ├── courses/create/page.tsx      # 7-Step Curriculum Authoring Studio
+│   │   ├── dashboard/page.tsx           # Prioritized Faculty & Supervisor Dashboard
+│   │   ├── profile/page.tsx             # Trainer 8-Section Academic Profile
+│   │   ├── trainer-matching/page.tsx    # Faculty Competency Match Engine
+│   │   └── layout.tsx                   # Trainer Route Guard & Layout
+│   ├── verify/
+│   │   └── [id]/page.tsx                # Public QR Credential Verification Ledger
+│   ├── globals.css                      # Unified Design System CSS Tokens
+│   ├── layout.tsx                       # Root Layout & Metadata
+│   └── page.tsx                         # National Portal Landing Homepage
+├── components/
+│   ├── AdminCharts.tsx                  # Standardized Recharts Analytics
+│   ├── AssessmentRunner.tsx             # Timed MCQ Pre/Post Assessment Runner
+│   ├── CapacityAIAssistant.tsx          # Pedagogical Context-Aware AI Console
+│   ├── CertificateView.tsx              # QR-Verified Digital Certificate Document
+│   ├── CompetencyGraph.tsx              # Interactive SVG Knowledge Graph
+│   ├── CompetencyPassportView.tsx       # Institutional Government Passport Credential
+│   ├── CourseCard.tsx                   # Standardized National Course Card
+│   ├── CoursePlayer.tsx                 # 7-Tier Course Player & Lesson Syllabus
+│   ├── DocumentQABar.tsx                # In-Document Zero-Hallucination Q&A Bar
+│   ├── EarlySupportSignal.tsx           # Early Warning Remedial Notification Chip
+│   ├── Header.tsx                       # Vertically-Aligned Institutional Header
+│   ├── KnowledgeSearchModal.tsx         # Grouped Category Global Search Modal
+│   ├── LearningPathTimeline.tsx         # Connected Milestone Road Map Timeline
+│   ├── PendingUsersTable.tsx            # Admin Personnel Approvals Table
+│   ├── PrototypeDisclaimer.tsx          # Institutional Disclaimer Banner
+│   ├── RoleMatrixCompare.tsx            # Cadre Benchmark Comparison Matrix
+│   ├── Sidebar.tsx                      # Collapsible Mobile Bar & Desktop Sidebar
+│   ├── SkillGapVisualizer.tsx           # Scannable Skill Gap & Remedial Cards
+│   ├── SkillHeatmapView.tsx             # Departmental Matrix & Drill-Down Modal
+│   ├── TrainerMatchingTool.tsx          # Deterministic Faculty Matching Matrix
+│   ├── TrainingCalendarView.tsx         # Live Webex Sessions & Deadlines Calendar
+│   └── TrainingImpactAnalyticsView.tsx  # Station-wide Training Gain Analytics
+└── lib/
+    ├── auth.ts                          # Session Handling & Route Protection
+    ├── data-service.ts                  # Central Mock/Database Data Access Service
+    ├── seed-data.ts                     # Institutional Seed Data & Competencies
+    └── types.ts                         # Complete TypeScript Interfaces & Schemas
+
+================================================================================
+8. FUTURE SCALABILITY & COMPLIANCE GUIDELINES
+================================================================================
+1. Backend & Persistence:
+   - Data access is centralized in lib/data-service.ts, ready for direct MongoDB
+     Mongoose binding without breaking any UI contract or component prop signature.
+
+2. Object Storage:
+   - File attachment fallbacks in Course Creation Studio are pre-configured to point
+     to standard S3 / Supabase Storage buckets.
+
+3. Government Security & Data Sovereignty:
+   - The verification ledger hides personal contact information, scores, and 
+     disciplinary records on public QR verification links to comply with national
+     privacy standards.
+
+4. Visual Language Maintenance:
+   - Any future pages should strictly adhere to the tokens declared in app/globals.css
+     using the .input-gov, .btn-primary, and .badge-status-* utility classes to preserve
+     single-team aesthetic uniformity.
+
+================================================================================
+END OF DOCUMENTATION FILE
+================================================================================

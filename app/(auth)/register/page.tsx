@@ -79,7 +79,7 @@ export default function RegisterPage() {
                     New Personnel Registration
                   </h1>
                   <p className="text-xs text-slate-500 mt-1">
-                    Apply for an official Capacity Connect training account
+                    Apply for an official MeghSetu training account
                   </p>
                 </div>
 
@@ -111,7 +111,7 @@ export default function RegisterPage() {
                         value={formData.name}
                         onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                         placeholder="Dr. / Shri / Smt."
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600"
+                        className="input-gov"
                       />
                     </div>
 
@@ -125,7 +125,7 @@ export default function RegisterPage() {
                         value={formData.email}
                         onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                         placeholder="officer@imd.gov.in"
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600"
+                        className="input-gov"
                       />
                     </div>
                   </div>
@@ -138,7 +138,7 @@ export default function RegisterPage() {
                       <select
                         value={formData.role}
                         onChange={(e) => setFormData({ ...formData, role: e.target.value })}
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 bg-white"
+                        className="input-gov bg-white"
                       >
                         <option value="trainee">Trainee (Learner / Forecaster)</option>
                         <option value="trainer">Trainer (Instructor / Scientist)</option>
@@ -155,7 +155,7 @@ export default function RegisterPage() {
                         value={formData.password}
                         onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                         placeholder="Password123!"
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600"
+                        className="input-gov"
                       />
                     </div>
                   </div>
@@ -171,7 +171,7 @@ export default function RegisterPage() {
                         value={formData.department}
                         onChange={(e) => setFormData({ ...formData, department: e.target.value })}
                         placeholder="e.g. RMC Chennai / NWP Division"
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600"
+                        className="input-gov"
                       />
                     </div>
 
@@ -185,7 +185,7 @@ export default function RegisterPage() {
                         value={formData.designation}
                         onChange={(e) => setFormData({ ...formData, designation: e.target.value })}
                         placeholder="e.g. Scientific Assistant / Meteorologist"
-                        className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600"
+                        className="input-gov"
                       />
                     </div>
                   </div>
@@ -199,16 +199,16 @@ export default function RegisterPage() {
                       value={formData.phone}
                       onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
                       placeholder="+91 XXXXX XXXXX"
-                      className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600"
+                      className="input-gov"
                     />
                   </div>
 
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full py-2.5 px-4 bg-blue-950 hover:bg-blue-900 text-white rounded-lg text-xs font-bold shadow-md transition flex items-center justify-center gap-2 mt-2"
+                    className="w-full btn-primary py-2.5 px-4 text-xs font-bold shadow-md mt-2"
                   >
-                    <span>{loading ? 'Submitting Registration...' : 'Submit Application'}</span>
+                    <span>{loading ? 'Submitting Registration...' : 'Submit Registration for Verification'}</span>
                     <ArrowRight className="w-3.5 h-3.5" />
                   </button>
                 </form>

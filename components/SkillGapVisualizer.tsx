@@ -92,88 +92,108 @@ export default function SkillGapVisualizer({
             return (
               <div
                 key={idx}
-                className="p-4 sm:p-5 hover:bg-slate-50/60 transition flex flex-col lg:flex-row lg:items-center justify-between gap-4"
+                className="p-5 sm:p-6 hover:bg-slate-50/60 transition flex flex-col lg:flex-row lg:items-center justify-between gap-6"
               >
                 {/* Left: Competency & Status */}
-                <div className="lg:w-1/3">
-                  <div className="flex items-center gap-2 mb-1">
-                    <h4 className="text-sm font-bold text-slate-900">{item.competencyName}</h4>
+                <div className="lg:w-1/2 space-y-3">
+                  <div className="flex items-center gap-2">
+                    {hasGap ? (
+                      <AlertCircle className="w-4 h-4 text-amber-600 shrink-0" />
+                    ) : (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+                    )}
+                    <h4 className="text-sm font-bold text-slate-900 font-serif">
+                      {item.competencyName}
+                    </h4>
                     <span
-                      className={`text-[10px] font-bold px-2 py-0.5 rounded uppercase ${
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded font-mono ${
                         item.status === 'Satisfied'
-                          ? 'bg-emerald-100 text-emerald-800 border border-emerald-200'
+                          ? 'badge-status-completed'
                           : item.status === 'Critical'
-                          ? 'bg-red-100 text-red-800 border border-red-200'
-                          : 'bg-amber-100 text-amber-800 border border-amber-200'
+                          ? 'badge-status-error'
+                          : 'badge-status-pending'
                       }`}
                     >
-                      {item.status === 'Satisfied'
-                        ? 'Benchmark Met'
-                        : `${item.status} Gap: -${item.gap}%`}
+                      {item.status === 'Satisfied' ? 'Benchmark Satisfied' : `Gap: ${item.gap}%`}
                     </span>
                   </div>
 
-                  {/* Dual Bar Comparison */}
-                  <div className="mt-2 space-y-1">
-                    <div className="flex items-center justify-between text-[11px] font-mono">
-                      <span className="text-slate-600">
-                        Current: <strong>{item.currentScore}%</strong>
+                  {/* Current vs Required Metrics Card */}
+                  <div className="grid grid-cols-2 gap-3 p-3 bg-slate-50 rounded-xl border border-slate-200/80">
+                    <div>
+                      <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">
+                        Current Level
                       </span>
-                      <span className="text-slate-400">
-                        Required: <strong>{item.requiredScore}%</strong>
+                      <span className="text-lg font-bold font-mono text-slate-900">
+                        {item.currentScore}%
                       </span>
                     </div>
-                    <div className="w-full bg-slate-100 rounded-full h-2.5 overflow-hidden flex">
+                    <div>
+                      <span className="text-[10px] font-semibold text-slate-500 uppercase tracking-wider block">
+                        Required Level
+                      </span>
+                      <span className="text-lg font-bold font-mono text-blue-900">
+                        {item.requiredScore}%
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Dual Bar Comparison */}
+                  <div className="space-y-1">
+                    <div className="w-full bg-slate-200 rounded-full h-2 overflow-hidden flex">
                       <div
-                        className={`h-2.5 rounded-l-full ${
-                          item.currentScore >= item.requiredScore ? 'bg-emerald-600' : 'bg-blue-600'
+                        className={`h-2 rounded-l-full ${
+                          item.currentScore >= item.requiredScore ? 'bg-emerald-600' : 'bg-blue-900'
                         }`}
                         style={{ width: `${item.currentScore}%` }}
-                      ></div>
+                      />
                       {hasGap && (
                         <div
-                          className="h-2.5 bg-red-400/80 rounded-r-full"
+                          className="h-2 bg-rose-400 rounded-r-full"
                           style={{ width: `${item.gap}%` }}
-                        ></div>
+                        />
                       )}
                     </div>
                   </div>
                 </div>
 
-                {/* Right: Real Recommended Courses based on Stored Competency Mapping */}
-                <div className="lg:w-2/3 lg:pl-6 lg:border-l border-slate-200">
-                  <p className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-2 flex items-center gap-1">
+                {/* Right: Recommended Course with Start Learning CTA */}
+                <div className="lg:w-1/2 lg:pl-6 lg:border-l border-slate-200 space-y-2">
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-400 flex items-center gap-1.5">
                     <Sparkles className="w-3.5 h-3.5 text-amber-500" />
-                    <span>Targeted Recommended Upskilling</span>
+                    <span>Recommended Training Module</span>
                   </p>
 
                   {item.recommendedCourses && item.recommendedCourses.length > 0 ? (
-                    <div className="flex flex-wrap gap-2">
+                    <div className="space-y-2">
                       {item.recommendedCourses.map((c) => (
-                        <Link
+                        <div
                           key={c.id}
-                          href={`/courses/${c.id}`}
-                          className="group p-2.5 bg-slate-50 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 rounded-lg flex items-center justify-between gap-3 text-xs transition"
+                          className="p-3.5 bg-slate-50 rounded-xl border border-slate-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs"
                         >
                           <div>
-                            <div className="font-semibold text-slate-800 group-hover:text-blue-900">
+                            <div className="font-bold text-slate-900 font-serif">
                               {c.title}
                             </div>
-                            <div className="text-[10px] text-slate-500">
-                              {c.difficulty} • {c.duration}
+                            <div className="text-[11px] text-slate-500 mt-0.5">
+                              {c.difficulty} • Duration: {c.duration}
                             </div>
                           </div>
-                          <span className="p-1 bg-white rounded border border-slate-200 group-hover:border-blue-300 text-blue-900">
+                          <Link
+                            href={`/courses/${c.id}`}
+                            className="btn-primary py-1.5 px-3 text-xs shrink-0 self-start sm:self-center"
+                          >
+                            <span>Start Learning</span>
                             <ArrowRight className="w-3.5 h-3.5" />
-                          </span>
-                        </Link>
+                          </Link>
+                        </div>
                       ))}
                     </div>
                   ) : (
-                    <p className="text-xs text-emerald-700 flex items-center gap-1.5 font-medium">
+                    <div className="p-3 bg-emerald-50/70 border border-emerald-200/70 rounded-xl text-xs text-emerald-800 flex items-center gap-2">
                       <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
-                      <span>Operational proficiency fulfilled. No remedial modules required.</span>
-                    </p>
+                      <span>Benchmark fulfilled. No remedial course needed for this competency.</span>
+                    </div>
                   )}
                 </div>
               </div>

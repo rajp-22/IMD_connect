@@ -23,7 +23,7 @@ export interface AIChatResponse {
 }
 
 /**
- * Domain-specific meteorological intelligence bank for IMD Capacity Connect.
+ * Domain-specific meteorological intelligence bank for IMD MeghSetu.
  * Serves accurate, non-hallucinatory pedagogical guidance grounded in IMD syllabus.
  */
 const METEOROLOGICAL_KNOWLEDGE_BASE: Record<string, { summary: string; explanation: string; practiceQuestions: string[]; citations: IAICitation[] }> = {
@@ -108,7 +108,7 @@ const METEOROLOGICAL_KNOWLEDGE_BASE: Record<string, { summary: string; explanati
 };
 
 /**
- * Main Capacity AI query dispatcher.
+ * Main MeghSetu AI query dispatcher.
  * Integrates external LLM providers (Gemini or OpenAI) with fallback to IMD's verified meteorological engine.
  */
 export async function askCapacityAI(req: AIChatRequest): Promise<AIChatResponse> {
@@ -147,7 +147,7 @@ function generateDomainMeteorologicalResponse(req: AIChatRequest): AIChatRespons
     const topic = p.includes('satellite') || p.includes('dvorak') ? 'dvorak' : p.includes('tephigram') || p.includes('thermodynamic') ? 'tephigram' : p.includes('aws') || p.includes('instrument') ? 'aws' : 'nwp';
     const entry = METEOROLOGICAL_KNOWLEDGE_BASE[topic];
     return {
-      message: `### Capacity AI — Practice Concept Assessment\n\nHere are targeted practice questions formulated directly from your learning curriculum on **${req.courseTitle || 'Atmospheric Science'}**:\n\n${entry.practiceQuestions.join('\n\n')}\n\n*Review these against your module lecture notes, or ask Capacity AI to evaluate your answers.*`,
+      message: `### MeghSetu AI — Practice Concept Assessment\n\nHere are targeted practice questions formulated directly from your learning curriculum on **${req.courseTitle || 'Atmospheric Science'}**:\n\n${entry.practiceQuestions.join('\n\n')}\n\n*Review these against your module lecture notes, or ask MeghSetu AI to evaluate your answers.*`,
       citations: entry.citations,
       suggestedFollowups: [
         'Explain the answers to these questions',
@@ -169,7 +169,7 @@ function generateDomainMeteorologicalResponse(req: AIChatRequest): AIChatRespons
         .join(' ');
 
       return {
-        message: `### Capacity AI Lesson Summary\n\n**Core Subject:** ${req.lessonTitle || req.courseTitle || 'Meteorological Operations'}\n\n**Executive Key Points:**\n1. **Fundamental Physical Mechanism**: Governing thermodynamics and hydrodynamics dictate atmospheric evolution.\n2. **Observational Baseline**: Accurate observational parameters (surface AWS, radiosonde soundings, and INSAT satellite radiances) form the verified initialization inputs.\n3. **Operational Synoptic Application**: Forecasters synthesize automated model predictions with regional climatology to issue color-coded impact bulletins.\n\n**Summary Extract:**\n> "${firstLines.slice(0, 320)}..."\n\n*Note: Prototype demo content synthesized from authorized training material.*`,
+        message: `### MeghSetu AI Lesson Summary\n\n**Core Subject:** ${req.lessonTitle || req.courseTitle || 'Meteorological Operations'}\n\n**Executive Key Points:**\n1. **Fundamental Physical Mechanism**: Governing thermodynamics and hydrodynamics dictate atmospheric evolution.\n2. **Observational Baseline**: Accurate observational parameters (surface AWS, radiosonde soundings, and INSAT satellite radiances) form the verified initialization inputs.\n3. **Operational Synoptic Application**: Forecasters synthesize automated model predictions with regional climatology to issue color-coded impact bulletins.\n\n**Summary Extract:**\n> "${firstLines.slice(0, 320)}..."\n\n*Note: Prototype demo content synthesized from authorized training material.*`,
         citations: [
           {
             sourceDocument: req.documentTitle || req.courseTitle || 'Course Curriculum Notes',
@@ -190,7 +190,7 @@ function generateDomainMeteorologicalResponse(req: AIChatRequest): AIChatRespons
   // Mode: Revision Plan
   if (req.mode === 'revision' || p.includes('revision plan') || p.includes('how to prepare')) {
     return {
-      message: `### Capacity AI — Structured 5-Day Assessment Revision Plan\n\n**Target:** ${req.courseTitle || 'Meteorological Competency Assessment'}\n\n- **Day 1: Theoretical Foundations**\n  - Review Atmospheric layers, hydrostatic balance, and the Hypsometric equation.\n  - Key focus: Tropospheric lapse rates and pressure reduction protocols.\n- **Day 2: Instruments & Observation Standards**\n  - Revisit Stevenson screen parameters, AWS sensor tolerances, and synoptic UTC hours.\n  - Practice station model plotting ($ww$ symbols, barometric tendency).\n- **Day 3: Upper-Air & Thermodynamics**\n  - Plot sample Tephigrams: calculate LCL, LFC, and evaluate CAPE/CIN levels.\n  - Study thermal wind and jet stream cross-sections.\n- **Day 4: Satellite & Radar Interpretation**\n  - Interpret INSAT-3DR TIR1 vs Water Vapor imagery.\n  - Dvorak T-number classifications and radar reflectivity echoes.\n- **Day 5: Mock Assessment & Remedial Review**\n  - Take the 20-minute practice assessment.\n  - Review incorrect attempts with Capacity AI.`,
+      message: `### MeghSetu AI — Structured 5-Day Assessment Revision Plan\n\n**Target:** ${req.courseTitle || 'Meteorological Competency Assessment'}\n\n- **Day 1: Theoretical Foundations**\n  - Review Atmospheric layers, hydrostatic balance, and the Hypsometric equation.\n  - Key focus: Tropospheric lapse rates and pressure reduction protocols.\n- **Day 2: Instruments & Observation Standards**\n  - Revisit Stevenson screen parameters, AWS sensor tolerances, and synoptic UTC hours.\n  - Practice station model plotting ($ww$ symbols, barometric tendency).\n- **Day 3: Upper-Air & Thermodynamics**\n  - Plot sample Tephigrams: calculate LCL, LFC, and evaluate CAPE/CIN levels.\n  - Study thermal wind and jet stream cross-sections.\n- **Day 4: Satellite & Radar Interpretation**\n  - Interpret INSAT-3DR TIR1 vs Water Vapor imagery.\n  - Dvorak T-number classifications and radar reflectivity echoes.\n- **Day 5: Mock Assessment & Remedial Review**\n  - Take the 20-minute practice assessment.\n  - Review incorrect attempts with MeghSetu AI.`,
       suggestedFollowups: [
         'Generate practice questions for Day 1',
         'Explain CAPE and CIN simply',
@@ -224,7 +224,7 @@ function generateDomainMeteorologicalResponse(req: AIChatRequest): AIChatRespons
   // Mode: Course Recommendation Help
   if (req.mode === 'recommendation' || p.includes('what should i learn') || p.includes('recommend')) {
     return {
-      message: `### Capacity AI — Personalized Course Guidance\n\nBased on your role profile and competency analysis:\n\n1. **Primary Recommended Course**: **Weather Forecasting Fundamentals**\n   - *Why?* Addresses your identified Weather Forecasting competency gap (current 45% vs required 75%).\n   - *Prerequisite value:* Required before enrolling in Advanced Tropical Cyclone Forecasting.\n2. **Secondary Recommendation**: **Python for Meteorological Data Analysis**\n   - *Why?* Enhances your automated AWS and NetCDF gridded data processing capabilities.\n3. **Milestone Goal**: Attain Level 3 (Advanced) certification to qualify for Regional Forecasting Centre roster duties.`,
+      message: `### MeghSetu AI — Personalized Course Guidance\n\nBased on your role profile and competency analysis:\n\n1. **Primary Recommended Course**: **Weather Forecasting Fundamentals**\n   - *Why?* Addresses your identified Weather Forecasting competency gap (current 45% vs required 75%).\n   - *Prerequisite value:* Required before enrolling in Advanced Tropical Cyclone Forecasting.\n2. **Secondary Recommendation**: **Python for Meteorological Data Analysis**\n   - *Why?* Enhances your automated AWS and NetCDF gridded data processing capabilities.\n3. **Milestone Goal**: Attain Level 3 (Advanced) certification to qualify for Regional Forecasting Centre roster duties.`,
       suggestedFollowups: [
         'Show my personalized learning path',
         'What is my largest skill gap?',
@@ -279,7 +279,7 @@ function generateDomainMeteorologicalResponse(req: AIChatRequest): AIChatRespons
 
   // Default intelligent assistant response
   return {
-    message: `Hello! I am **Capacity AI**, your meteorological learning assistant inside IMD Capacity Connect.\n\nI can help you:\n- **Explain** complex meteorological and computational concepts simply.\n- **Summarize** current lessons and authorized reference manuals.\n- **Formulate revision plans** for upcoming pre- and post-assessments.\n- **Generate practice questions** directly from your syllabus.\n- **Explain assessment results** to guide remedial learning.\n\nWhat topic would you like to explore today?`,
+    message: `Hello! I am **MeghSetu AI**, your meteorological learning assistant inside IMD MeghSetu.\n\nI can help you:\n- **Explain** complex meteorological and computational concepts simply.\n- **Summarize** current lessons and authorized reference manuals.\n- **Formulate revision plans** for upcoming pre- and post-assessments.\n- **Generate practice questions** directly from your syllabus.\n- **Explain assessment results** to guide remedial learning.\n\nWhat topic would you like to explore today?`,
     suggestedFollowups: [
       'Explain numerical weather prediction simply',
       'Give me 5 practice questions on Tephigrams',
@@ -294,7 +294,7 @@ async function callGemini(req: AIChatRequest): Promise<AIChatResponse | null> {
   const apiKey = process.env.GEMINI_API_KEY;
   if (!apiKey) return null;
 
-  const systemInstruction = `You are Capacity AI, the official pedagogical learning assistant for India Meteorological Department's (IMD) Capacity Connect training portal. Explain meteorological, observational, and computational concepts clearly, rigorously, and accurately according to WMO and IMD guidelines. Never fabricate official bulletins or classifications. If asked about a document or lesson, base your response strictly on the provided context.`;
+  const systemInstruction = `You are MeghSetu AI, the official pedagogical learning assistant for India Meteorological Department's (IMD) MeghSetu training portal. Explain meteorological, observational, and computational concepts clearly, rigorously, and accurately according to WMO and IMD guidelines. Never fabricate official bulletins or classifications. If asked about a document or lesson, base your response strictly on the provided context.`;
 
   const response = await fetch(
     `https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`,
@@ -348,7 +348,7 @@ async function callOpenAI(req: AIChatRequest): Promise<AIChatResponse | null> {
         {
           role: 'system',
           content:
-            'You are Capacity AI, pedagogical learning assistant for India Meteorological Department (IMD) Capacity Connect. Answer accurately with rigorous meteorological science.',
+            'You are MeghSetu AI, pedagogical learning assistant for India Meteorological Department (IMD) MeghSetu. Answer accurately with rigorous meteorological science.',
         },
         {
           role: 'user',

@@ -62,7 +62,7 @@ export default function EarlySupportSignal({
             <Brain className="w-4 h-4 text-blue-900 shrink-0" />
             <div>
               <div className="text-xs font-bold text-slate-800 group-hover:text-blue-900">
-                Capacity AI Revision
+                MeghSetu AI Revision
               </div>
               <div className="text-[10px] text-slate-500">Practice concept questions</div>
             </div>

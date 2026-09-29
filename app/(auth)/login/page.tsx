@@ -109,7 +109,7 @@ function LoginForm() {
                 IMD Official Portal Sign In
               </h1>
               <p className="text-xs text-slate-500 mt-1">
-                Enter your credentials to access Capacity Connect
+                Enter your credentials to access MeghSetu
               </p>
             </div>
 
@@ -133,15 +133,15 @@ function LoginForm() {
                 <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
                   Official Email Address
                 </label>
-                <div className="relative">
-                  <Mail className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                <div className="relative flex items-center">
+                  <Mail className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
                   <input
                     type="email"
                     required
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="name@imd.gov.in or demo email"
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
+                    className="input-gov !pl-10"
                   />
                 </div>
               </div>
@@ -151,17 +151,17 @@ function LoginForm() {
                   <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider">
                     Password
                   </label>
-                  <span className="text-[10px] text-slate-400">Demo: Password123!</span>
+                  <span className="text-[10px] text-slate-400 font-mono">Demo: Password123!</span>
                 </div>
-                <div className="relative">
-                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 top-3" />
+                <div className="relative flex items-center">
+                  <Lock className="w-4 h-4 text-slate-400 absolute left-3 pointer-events-none" />
                   <input
                     type="password"
                     required
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     placeholder="••••••••••••"
-                    className="w-full pl-9 pr-3 py-2 text-xs rounded-lg border border-slate-300 focus:outline-hidden focus:ring-2 focus:ring-blue-600 focus:border-blue-600 transition"
+                    className="input-gov !pl-10"
                   />
                 </div>
               </div>
@@ -169,7 +169,7 @@ function LoginForm() {
               <button
                 type="submit"
                 disabled={loading}
-                className="w-full py-2.5 px-4 bg-blue-950 hover:bg-blue-900 text-white rounded-lg text-xs font-bold shadow-md transition flex items-center justify-center gap-2"
+                className="w-full btn-primary py-2.5 px-4 text-xs font-bold shadow-md"
               >
                 <span>{loading ? 'Authenticating...' : 'Sign In to Portal'}</span>
                 <ArrowRight className="w-3.5 h-3.5" />

@@ -25,7 +25,7 @@ const AIConversationSchema = new Schema(
     },
     courseId: { type: Schema.Types.ObjectId, ref: 'Course' },
     lessonId: { type: String },
-    title: { type: String, default: 'Capacity AI Session' },
+    title: { type: String, default: 'MeghSetu AI Session' },
     messages: [AIMessageSchema],
   },
   { timestamps: true }

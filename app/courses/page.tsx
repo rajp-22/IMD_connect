@@ -37,7 +37,7 @@ export default async function CoursesCatalogPage({
       <Header user={user} />
       <PrototypeDisclaimer />
 
-      <main className="flex-1 max-w-7xl mx-auto w-full px-4 sm:px-6 lg:px-8 py-8 space-y-8">
+      <main className="flex-1 portal-container py-8 space-y-8">
         {/* Header */}
         <div className="pb-4 border-b border-slate-200">
           <span className="text-xs font-bold uppercase tracking-wider text-blue-900">

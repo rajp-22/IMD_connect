@@ -266,7 +266,7 @@ export default function CreateCoursePage() {
 
           <div>
             <label className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1">
-              Course Title
+              Course Title <span className="text-rose-500">*</span>
             </label>
             <input
               type="text"
@@ -274,7 +274,7 @@ export default function CreateCoursePage() {
               value={courseInfo.title}
               onChange={(e) => setCourseInfo({ ...courseInfo, title: e.target.value })}
               placeholder="e.g. Advanced Doppler Weather Radar Analysis"
-              className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 focus:ring-2 focus:ring-blue-600 font-medium"
+              className="input-gov font-medium"
             />
           </div>
 
@@ -286,7 +286,7 @@ export default function CreateCoursePage() {
               <select
                 value={courseInfo.category}
                 onChange={(e) => setCourseInfo({ ...courseInfo, category: e.target.value })}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white"
+                className="input-gov bg-white"
               >
                 <option value="Synoptic Meteorology & Forecasting">
                   Synoptic Meteorology & Forecasting
@@ -311,7 +311,7 @@ export default function CreateCoursePage() {
                 onChange={(e) =>
                   setCourseInfo({ ...courseInfo, difficulty: e.target.value as CompetencyLevel })
                 }
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white"
+                className="input-gov bg-white"
               >
                 <option value="Beginner">Beginner</option>
                 <option value="Intermediate">Intermediate</option>
@@ -328,7 +328,7 @@ export default function CreateCoursePage() {
               <select
                 value={courseInfo.competencyDomain}
                 onChange={(e) => setCourseInfo({ ...courseInfo, competencyDomain: e.target.value })}
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300 bg-white"
+                className="input-gov bg-white"
               >
                 <option value="Weather Forecasting">Weather Forecasting</option>
                 <option value="Meteorology">Meteorology</option>
@@ -349,7 +349,7 @@ export default function CreateCoursePage() {
                 value={courseInfo.duration}
                 onChange={(e) => setCourseInfo({ ...courseInfo, duration: e.target.value })}
                 placeholder="4 Weeks (20 Hours)"
-                className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300"
+                className="input-gov"
               />
             </div>
           </div>
@@ -363,7 +363,7 @@ export default function CreateCoursePage() {
               value={courseInfo.description}
               onChange={(e) => setCourseInfo({ ...courseInfo, description: e.target.value })}
               placeholder="Outline specific meteorological skills, forecast charts, and practical competencies imparted..."
-              className="w-full px-3 py-2 text-xs rounded-lg border border-slate-300"
+              className="input-gov"
             ></textarea>
           </div>
         </div>

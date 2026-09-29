@@ -114,18 +114,20 @@ export default function Header({ user }: HeaderProps) {
     <>
       <header className="sticky top-0 z-40 bg-white border-b border-slate-200 shadow-xs">
         {/* Top Gov Info Strip */}
-        <div className="bg-slate-900 text-slate-300 text-xs px-4 py-1 flex items-center justify-between">
-          <div className="flex items-center space-x-3 max-w-7xl mx-auto w-full">
-            <span className="font-semibold text-white tracking-wide flex items-center gap-1.5">
-              <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              भारत सरकार | Government of India
-            </span>
-            <span className="text-slate-500">|</span>
-            <span className="hidden sm:inline text-slate-300">
-              पृथ्वी विज्ञान मंत्रालय | Ministry of Earth Sciences (MoES)
-            </span>
-            <div className="ml-auto flex items-center gap-3">
-              <span className="text-[11px] text-slate-300 hidden md:inline">
+        <div className="bg-slate-900 text-slate-300 text-[13px] py-1.5 border-b border-slate-800/80">
+          <div className="portal-container flex items-center justify-between">
+            <div className="flex items-center space-x-3">
+              <span className="font-semibold text-white tracking-wide flex items-center gap-1.5">
+                <span className="inline-block w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                भारत सरकार | Government of India
+              </span>
+              <span className="text-slate-500">|</span>
+              <span className="hidden sm:inline text-slate-300 font-medium">
+                पृथ्वी विज्ञान मंत्रालय | Ministry of Earth Sciences (MoES)
+              </span>
+            </div>
+            <div className="flex items-center gap-3">
+              <span className="text-[12px] text-slate-300 font-medium hidden md:inline">
                 भारत मौसम विज्ञान विभाग | IMD
               </span>
             </div>
@@ -135,76 +137,86 @@ export default function Header({ user }: HeaderProps) {
         <div className="h-0.5 w-full bg-gradient-to-r from-orange-500 via-white to-emerald-600"></div>
 
         {/* Main Navigation Header */}
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16">
+        <div className="portal-container">
+          <div className="flex items-center justify-between gap-3 h-16">
             {/* Brand Logo and Title */}
-            <Link href="/" className="flex items-center gap-3 group">
-              <div className="w-10 h-10 rounded-lg bg-blue-900 text-white flex items-center justify-center shadow-md group-hover:bg-blue-800 transition">
-                <CloudSun className="w-6 h-6 text-amber-400" />
+            <Link href="/" className="flex items-center gap-2.5 sm:gap-3 group shrink-0">
+              <div className="w-9 h-9 sm:w-10 sm:h-10 rounded-lg bg-blue-900 text-white flex items-center justify-center shadow-md group-hover:bg-blue-800 transition shrink-0">
+                <CloudSun className="w-5 h-5 sm:w-6 sm:h-6 text-amber-400" />
               </div>
-              <div>
+              <div className="shrink-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-lg font-bold tracking-tight text-blue-950 font-serif">
-                    CAPACITY CONNECT
+                  <span className="text-lg sm:text-xl font-bold tracking-tight text-blue-950">
+                    MEGHSETU
                   </span>
-                  <span className="bg-blue-100 text-blue-800 text-[10px] font-bold px-1.5 py-0.5 rounded tracking-wider uppercase">
+                  <span className="bg-blue-100 text-blue-800 text-[11px] font-bold px-2 py-0.5 rounded tracking-wider uppercase">
                     IMD Portal
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 hidden sm:block">
+                <p className="text-xs text-slate-500 font-normal hidden xl:block">
                   Learning Intelligence & Capacity Building | India Meteorological Department
                 </p>
               </div>
             </Link>
 
-            {/* Middle: Global Knowledge Search Trigger (Feature 14) */}
-            <div className="hidden md:flex items-center">
+            {/* Middle: Global Knowledge Search Trigger (Desktop) */}
+            <div className="hidden lg:flex items-center shrink-0">
               <button
                 type="button"
                 onClick={() => setSearchOpen(true)}
-                className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 hover:bg-slate-200/80 text-slate-600 hover:text-slate-900 rounded-lg border border-slate-200 text-xs w-64 justify-between transition-colors shadow-2xs"
+                className="flex items-center gap-2 px-3 py-1.5 h-9 bg-slate-100 hover:bg-slate-200/90 text-slate-600 hover:text-slate-900 rounded-lg border border-slate-200 hover:border-blue-400 text-sm font-medium w-48 xl:w-64 justify-between transition-all duration-200 shadow-2xs group focus:outline-none focus:ring-2 focus:ring-blue-900/20"
               >
-                <div className="flex items-center gap-2">
-                  <Search className="w-3.5 h-3.5 text-blue-900" />
-                  <span>Search knowledge base...</span>
+                <div className="flex items-center gap-2 truncate">
+                  <Search className="w-4 h-4 text-blue-900 transition-transform duration-200 group-hover:scale-110 shrink-0" />
+                  <span className="group-hover:text-slate-900 transition-colors truncate">Search knowledge...</span>
                 </div>
-                <kbd className="px-1.5 py-0.5 bg-white border border-slate-300 rounded font-mono text-[10px] text-slate-500">
+                <kbd className="px-1.5 py-0.5 bg-white border border-slate-300 rounded font-mono text-[11px] text-slate-500 shadow-2xs group-hover:border-slate-400 shrink-0">
                   Ctrl+K
                 </kbd>
               </button>
             </div>
 
             {/* Right Navigation & Controls */}
-            <div className="flex items-center gap-2.5">
+            <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+              {/* Mobile / Tablet Search Button */}
+              <button
+                type="button"
+                onClick={() => setSearchOpen(true)}
+                className="lg:hidden p-2 h-8 w-8 flex items-center justify-center text-slate-600 hover:text-blue-900 hover:bg-slate-100 rounded-lg transition"
+                title="Search knowledge base"
+              >
+                <Search className="w-4 h-4 text-blue-900" />
+              </button>
+
               {/* Quick AI Launch button */}
               {user && (
                 <Link
                   href="/trainee/ai"
-                  className="flex items-center gap-1.5 px-2.5 py-1 text-xs font-semibold text-blue-900 bg-blue-50 hover:bg-blue-100 border border-blue-200 rounded-md transition"
-                  title="Open Capacity AI Assistant"
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-semibold text-blue-950 bg-blue-50/80 hover:bg-blue-100 border border-blue-200 hover:border-blue-300 rounded-lg transition-all duration-200 shadow-2xs hover:shadow-xs group whitespace-nowrap"
+                  title="Open MeghSetu AI Assistant"
                 >
-                  <Brain className="w-3.5 h-3.5 text-blue-800" />
-                  <span className="hidden sm:inline">Capacity AI</span>
+                  <Brain className="w-4 h-4 text-blue-800 transition-transform duration-300 group-hover:rotate-12 group-hover:scale-110 shrink-0" />
+                  <span className="hidden sm:inline">MeghSetu AI</span>
                 </Link>
               )}
 
-              {/* Notification Center Bell (Feature 17) */}
+              {/* Notification Center Bell */}
               {user && (
                 <div className="relative">
                   <button
                     type="button"
                     onClick={() => setShowNotifs(!showNotifs)}
-                    className="p-2 text-slate-600 hover:text-blue-900 hover:bg-slate-100 rounded-lg relative transition"
+                    className="p-2 h-8 w-8 flex items-center justify-center text-slate-600 hover:text-blue-900 hover:bg-slate-100 rounded-lg relative transition border border-transparent hover:border-slate-200"
                     title="Notifications"
                   >
                     <Bell className="w-4 h-4" />
                     {unreadCount > 0 && (
-                      <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full animate-pulse" />
+                      <span className="absolute top-1 right-1 w-2 h-2 bg-rose-500 rounded-full animate-pulse ring-2 ring-white" />
                     )}
                   </button>
 
                   {showNotifs && (
-                    <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl border border-slate-200 py-2 z-50 animate-in fade-in duration-100">
+                    <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-xl border border-slate-200 py-2 z-50 animate-in fade-in duration-100">
                       <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between">
                         <div className="flex items-center gap-2">
                           <span className="font-bold text-xs text-slate-800">Notifications</span>
@@ -274,54 +286,54 @@ export default function Header({ user }: HeaderProps) {
                 <button
                   type="button"
                   onClick={() => setShowDemoSwitch(!showDemoSwitch)}
-                  className="hidden lg:flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-300 rounded-md transition"
+                  className="hidden lg:flex items-center gap-2 px-3 py-1.5 text-sm font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200/90 border border-slate-300 hover:border-slate-400 rounded-lg transition-all duration-200 shadow-2xs hover:shadow-xs group whitespace-nowrap"
                   title="Switch demo accounts instantly"
                 >
-                  <ShieldCheck className="w-3.5 h-3.5 text-blue-700" />
+                  <ShieldCheck className="w-4 h-4 text-blue-800 transition-transform duration-200 group-hover:scale-110 shrink-0" />
                   <span>Demo Switcher</span>
-                  <ChevronDown className="w-3 h-3 text-slate-500" />
+                  <ChevronDown className="w-3.5 h-3.5 text-slate-500 transition-transform duration-200 group-hover:translate-y-0.5 shrink-0" />
                 </button>
 
                 {showDemoSwitch && (
-                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-slate-200 py-2 z-50 animate-in fade-in zoom-in-95 duration-100">
+                  <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-xl border border-slate-200 py-2 z-50 animate-in fade-in zoom-in-95 duration-100">
                     <div className="px-3 py-1.5 border-b border-slate-100">
-                      <p className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                      <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">
                         Switch Role (Demo)
                       </p>
                     </div>
                     <button
                       onClick={() => handleQuickLogin('trainee@capacityconnect.demo')}
-                      className="w-full text-left px-3 py-2 text-xs hover:bg-blue-50 flex items-center justify-between text-slate-800"
+                      className="w-full text-left px-3 py-2 text-xs hover:bg-blue-50 flex items-center justify-between text-slate-800 transition"
                     >
                       <div>
-                        <div className="font-semibold text-blue-900">Pooja Iyer (Trainee)</div>
-                        <div className="text-[10px] text-slate-500">RMC Mumbai, Sci. Asst-I</div>
+                        <div className="font-semibold text-blue-900 text-[13px]">Pooja Iyer (Trainee)</div>
+                        <div className="text-[11px] text-slate-500">RMC Mumbai, Sci. Asst-I</div>
                       </div>
-                      <span className="bg-blue-100 text-blue-800 text-[10px] px-1.5 py-0.5 rounded font-medium">
+                      <span className="bg-blue-100 text-blue-800 text-[11px] px-1.5 py-0.5 rounded font-medium">
                         Trainee
                       </span>
                     </button>
                     <button
                       onClick={() => handleQuickLogin('trainer@capacityconnect.demo')}
-                      className="w-full text-left px-3 py-2 text-xs hover:bg-emerald-50 flex items-center justify-between text-slate-800"
+                      className="w-full text-left px-3 py-2 text-xs hover:bg-emerald-50 flex items-center justify-between text-slate-800 transition"
                     >
                       <div>
-                        <div className="font-semibold text-emerald-900">Dr. Rajesh Sharma (Trainer)</div>
-                        <div className="text-[10px] text-slate-500">NWP Division, Sr. Scientist</div>
+                        <div className="font-semibold text-emerald-900 text-[13px]">Dr. Rajesh Sharma (Trainer)</div>
+                        <div className="text-[11px] text-slate-500">NWP Division, Sr. Scientist</div>
                       </div>
-                      <span className="bg-emerald-100 text-emerald-800 text-[10px] px-1.5 py-0.5 rounded font-medium">
+                      <span className="bg-emerald-100 text-emerald-800 text-[11px] px-1.5 py-0.5 rounded font-medium">
                         Trainer
                       </span>
                     </button>
                     <button
                       onClick={() => handleQuickLogin('admin@capacityconnect.demo')}
-                      className="w-full text-left px-3 py-2 text-xs hover:bg-amber-50 flex items-center justify-between text-slate-800"
+                      className="w-full text-left px-3 py-2 text-xs hover:bg-amber-50 flex items-center justify-between text-slate-800 transition"
                     >
                       <div>
-                        <div className="font-semibold text-amber-900">Dr. M. Mohapatra (Admin)</div>
-                        <div className="text-[10px] text-slate-500">DG Meteorology, IMD HQ</div>
+                        <div className="font-semibold text-amber-900 text-[13px]">Dr. M. Mohapatra (Admin)</div>
+                        <div className="text-[11px] text-slate-500">DG Meteorology, IMD HQ</div>
                       </div>
-                      <span className="bg-amber-100 text-amber-800 text-[10px] px-1.5 py-0.5 rounded font-medium">
+                      <span className="bg-amber-100 text-amber-800 text-[11px] px-1.5 py-0.5 rounded font-medium">
                         Admin
                       </span>
                     </button>
@@ -335,18 +347,28 @@ export default function Header({ user }: HeaderProps) {
                   <button
                     type="button"
                     onClick={() => setShowUserMenu(!showUserMenu)}
-                    className="flex items-center gap-2.5 p-1.5 pl-3 rounded-full border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50 transition shadow-2xs"
+                    className="flex items-center gap-2.5 pl-3 pr-2 py-1 rounded-full border border-slate-200 hover:border-slate-300 bg-white hover:bg-slate-50/80 transition-all duration-200 shadow-2xs hover:shadow-xs group"
                   >
-                    <div className="text-right hidden sm:block leading-tight">
-                      <p className="text-xs font-semibold text-slate-800">{user.name}</p>
-                      <p className="text-[10px] text-slate-500 uppercase tracking-wider font-mono">
-                        {user.role} • {user.department.substring(0, 18)}
+                    <div className="text-right hidden sm:block">
+                      <p className="text-sm font-bold text-slate-800 group-hover:text-blue-950 transition-colors leading-tight">
+                        {user.name}
+                      </p>
+                      <p className="text-xs text-slate-500 font-medium tracking-wide">
+                        <span className="uppercase font-semibold text-blue-900">{user.role}</span>
+                        {user.department && (
+                          <>
+                            <span className="mx-1 text-slate-300">•</span>
+                            <span className="truncate max-w-[140px] inline-block align-bottom" title={user.department}>
+                              {user.department}
+                            </span>
+                          </>
+                        )}
                       </p>
                     </div>
-                    <div className="w-8 h-8 rounded-full bg-blue-900 text-white font-bold text-xs flex items-center justify-center">
+                    <div className="w-8 h-8 rounded-full bg-gradient-to-br from-blue-900 to-blue-950 text-white font-bold text-xs flex items-center justify-center shadow-xs ring-2 ring-blue-100 shrink-0">
                       {user.name.charAt(0)}
                     </div>
-                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 mr-1" />
+                    <ChevronDown className="w-3.5 h-3.5 text-slate-400 group-hover:text-slate-600 transition-transform duration-200 shrink-0" />
                   </button>
 
                   {showUserMenu && (

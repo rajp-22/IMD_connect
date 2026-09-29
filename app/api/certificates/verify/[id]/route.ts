@@ -29,7 +29,7 @@ export async function GET(
         scorePercentage: cert.scorePercentage,
         preScorePercentage: cert.preScorePercentage,
         status: 'Officially Verified & Authentic',
-        issuingAuthority: 'India Meteorological Department (IMD) Capacity Connect Directorate',
+        issuingAuthority: 'India Meteorological Department (IMD) MeghSetu Directorate',
       },
     });
   } catch (error: any) {

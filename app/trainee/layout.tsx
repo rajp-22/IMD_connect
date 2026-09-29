@@ -27,7 +27,7 @@ export default async function TraineeLayout({
     <div className="min-h-screen flex flex-col bg-slate-50">
       <Header user={user} />
       <PrototypeDisclaimer />
-      <div className="flex-1 flex flex-col md:flex-row max-w-7xl w-full mx-auto">
+      <div className="flex-1 flex flex-col md:flex-row w-full portal-dashboard-wrapper">
         <Sidebar
           role="trainee"
           userName={user.name}

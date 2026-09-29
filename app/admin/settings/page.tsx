@@ -76,7 +76,7 @@ export default function AdminSettingsPage() {
             <div>
               <span className="font-bold text-slate-800">Deployment Mandate</span>
               <p className="text-slate-500 text-[11px]">
-                IMD Centralized Capacity Connect Portal • Ministry of Earth Sciences
+                IMD Centralized MeghSetu Portal • Ministry of Earth Sciences
               </p>
             </div>
             <span className="font-mono text-slate-600 text-[11px]">PROD-2026</span>

@@ -3,8 +3,9 @@ import bcrypt from 'bcryptjs';
 import { cookies } from 'next/headers';
 import { ISessionUser, UserRole } from './types';
 
-const JWT_SECRET = process.env.JWT_SECRET || 'capacity_connect_super_secret_jwt_key_sih_2026_imd_secure_token_987654321';
-const COOKIE_NAME = 'capacity_connect_token';
+const JWT_SECRET = process.env.JWT_SECRET || 'meghsetu_super_secret_jwt_key_sih_2026_imd_secure_token_987654321';
+const COOKIE_NAME = 'meghsetu_token';
+const LEGACY_COOKIE_NAME = 'capacity_connect_token';
 
 export async function hashPassword(password: string): Promise<string> {
   const salt = await bcrypt.genSalt(10);
@@ -43,7 +44,7 @@ export function verifyToken(token: string): ISessionUser | null {
 export async function getSessionUser(): Promise<ISessionUser | null> {
   try {
     const cookieStore = await cookies();
-    const token = cookieStore.get(COOKIE_NAME)?.value;
+    const token = cookieStore.get(COOKIE_NAME)?.value || cookieStore.get(LEGACY_COOKIE_NAME)?.value;
     if (!token) return null;
     return verifyToken(token);
   } catch (e) {
@@ -69,6 +70,7 @@ export async function setAuthCookie(user: ISessionUser): Promise<string> {
 export async function clearAuthCookie(): Promise<void> {
   const cookieStore = await cookies();
   cookieStore.delete(COOKIE_NAME);
+  cookieStore.delete(LEGACY_COOKIE_NAME);
 }
 
 export function hasRole(user: ISessionUser | null, allowedRoles: UserRole[]): boolean {

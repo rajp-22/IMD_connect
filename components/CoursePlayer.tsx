@@ -376,20 +376,26 @@ export default function CoursePlayer({
 
       {/* Main Learning Classroom Interface */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-        {/* Left: Syllabus Modules & Lessons Navigation */}
-        <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200 shadow-2xs overflow-hidden">
-          <div className="p-4 bg-slate-50 border-b border-slate-200">
+        {/* Left: Syllabus Modules & Lessons Navigation (Sticky) */}
+        <div className="lg:col-span-4 bg-white rounded-xl border border-slate-200/90 shadow-2xs overflow-hidden sticky top-20 self-start">
+          <div className="p-4 bg-slate-50 border-b border-slate-200 flex items-center justify-between">
             <h3 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-2">
               <BookOpen className="w-4 h-4 text-blue-900" />
               <span>Curriculum Syllabus</span>
             </h3>
+            <span className="text-[10px] font-mono text-slate-500 font-semibold">
+              {course.modules.length} Modules
+            </span>
           </div>
 
-          <div className="divide-y divide-slate-100 max-h-[600px] overflow-y-auto">
+          <div className="divide-y divide-slate-100 max-h-[calc(100vh-180px)] overflow-y-auto">
             {course.modules.map((mod) => (
               <div key={mod.id} className="p-3">
-                <div className="font-bold text-xs text-slate-800 mb-2 font-serif">
-                  {mod.title}
+                <div className="font-bold text-xs text-slate-900 mb-2 font-serif flex items-center justify-between">
+                  <span>{mod.title}</span>
+                  <span className="text-[10px] font-mono text-slate-400 font-normal">
+                    {mod.lessons.length} lessons
+                  </span>
                 </div>
                 <div className="space-y-1">
                   {mod.lessons.map((les) => {
@@ -399,9 +405,9 @@ export default function CoursePlayer({
                       <button
                         key={les.id}
                         onClick={() => setActiveLesson(les)}
-                        className={`w-full text-left p-2 rounded-lg text-xs transition flex items-start gap-2.5 ${
+                        className={`w-full text-left p-2.5 rounded-lg text-xs transition-all flex items-start gap-2.5 ${
                           isActive
-                            ? 'bg-blue-50 border border-blue-200 text-blue-950 font-semibold'
+                            ? 'bg-blue-50/90 border-l-4 border-blue-950 text-blue-950 font-semibold shadow-2xs'
                             : 'hover:bg-slate-50 text-slate-700'
                         }`}
                       >
@@ -409,7 +415,7 @@ export default function CoursePlayer({
                           {isDone ? (
                             <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                           ) : (
-                            <Circle className="w-4 h-4 text-slate-300" />
+                            <Circle className={`w-4 h-4 ${isActive ? 'text-blue-900' : 'text-slate-300'}`} />
                           )}
                         </div>
                         <div className="flex-1 min-w-0">
@@ -538,6 +544,101 @@ export default function CoursePlayer({
                   </div>
                 </div>
               )}
+              {/* Learning Resources & References if not on activeLesson */}
+              {(!activeLesson.resources || activeLesson.resources.length === 0) && (
+                <div className="pt-6 border-t border-slate-200">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2 flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5 text-blue-900" />
+                    <span>Learning Resources</span>
+                  </h4>
+                  <p className="text-xs text-slate-500">
+                    Standard IMD operational handbooks, WMO guidelines, and computational datasets for this course are accessible in the lesson syllabus modules.
+                  </p>
+                </div>
+              )}
+
+              {/* Assessment Section */}
+              <div className="pt-6 border-t border-slate-200 space-y-3">
+                <div className="flex items-center justify-between">
+                  <h4 className="text-xs font-bold uppercase tracking-wider text-slate-700 flex items-center gap-1.5">
+                    <FileCheck2 className="w-4 h-4 text-blue-900" />
+                    <span>Evaluation Assessments</span>
+                  </h4>
+                  <span className="text-[10px] font-mono text-slate-400">
+                    Passing Criteria: {assessment?.passingPercentage || 60}%
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/90 space-y-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-bold text-slate-900">1. Diagnostic Pre-Assessment</span>
+                      <span className="badge-status-pending">Baseline</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      20-minute diagnostic test to establish your incoming baseline score.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setIsPreAssessmentMode(true);
+                        setShowAssessment(true);
+                      }}
+                      className="btn-secondary w-full py-1.5 text-xs text-blue-900"
+                    >
+                      {enrollment?.preAssessmentScore !== undefined
+                        ? `Score: ${enrollment.preAssessmentScore}% (Retake)`
+                        : 'Take Diagnostic Pre-Assessment'}
+                    </button>
+                  </div>
+
+                  <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/90 space-y-2">
+                    <div className="flex items-center justify-between text-xs">
+                      <span className="font-bold text-slate-900">2. Final Certification Exam</span>
+                      <span className="badge-status-completed">Credential</span>
+                    </div>
+                    <p className="text-[11px] text-slate-500">
+                      Official post-course evaluation required to unlock your QR-verified certificate.
+                    </p>
+                    <button
+                      onClick={() => {
+                        setIsPreAssessmentMode(false);
+                        setShowAssessment(true);
+                      }}
+                      className="btn-primary w-full py-1.5 text-xs"
+                    >
+                      {enrollment?.status === 'completed' ? 'Retake Final Exam' : 'Take Certification Exam'}
+                    </button>
+                  </div>
+                </div>
+              </div>
+
+              {/* Trainer Information Section */}
+              <div className="pt-6 border-t border-slate-200">
+                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3 flex items-center gap-1.5">
+                  <User className="w-3.5 h-3.5 text-blue-900" />
+                  <span>Trainer Information</span>
+                </h4>
+                <div className="p-4 bg-slate-50 rounded-xl border border-slate-200/90 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+                  <div className="flex items-center gap-3">
+                    <div className="w-11 h-11 rounded-full bg-blue-950 text-amber-400 font-bold font-serif flex items-center justify-center shrink-0">
+                      {course.trainerName.charAt(0)}
+                    </div>
+                    <div>
+                      <h5 className="font-bold text-sm text-slate-900 font-serif">{course.trainerName}</h5>
+                      <p className="text-xs text-slate-600">Senior Faculty & Operational Meteorologist</p>
+                      <p className="text-[11px] text-slate-400">Numerical Weather Prediction Division, IMD HQ</p>
+                    </div>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Link
+                      href="/trainee/ai"
+                      className="btn-secondary text-xs py-1.5 px-3"
+                    >
+                      <span>Ask AI about Instructor</span>
+                    </Link>
+                  </div>
+                </div>
+              </div>
             </div>
           ) : (
             <div className="p-12 bg-white rounded-xl border border-slate-200 text-center text-xs text-slate-500">

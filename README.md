@@ -1,4 +1,4 @@
-# Capacity Connect — India Meteorological Department (IMD)
+# MeghSetu — India Meteorological Department (IMD)
 ### Centralized Digital Learning Management & Organizational Capacity Building Portal
 **Ministry of Earth Sciences (MoES), Government of India**
 
@@ -6,7 +6,7 @@
 
 ## 📌 1. Project Overview
 
-**Capacity Connect** is a production-quality, centralized Learning Management and Organizational Capacity Building portal custom-tailored for the **India Meteorological Department (IMD)**. Designed in accordance with government digital design principles, the platform unifies training administration, operational weather forecasting competencies, scientific curriculum management, and multi-tier evaluation.
+**MeghSetu** is a production-quality, centralized Learning Management and Organizational Capacity Building portal custom-tailored for the **India Meteorological Department (IMD)**. Designed in accordance with government digital design principles, the platform unifies training administration, operational weather forecasting competencies, scientific curriculum management, and multi-tier evaluation.
 
 ### Core Roles:
 1. **Trainee (Learners / Scientific Assistants / Forecasters)**:
@@ -163,8 +163,8 @@ The portal is seeded out-of-the-box with three verified demonstration accounts:
 2. **Environment Variables**:
    Create or verify `.env.local`:
    ```env
-   MONGODB_URI=mongodb://127.0.0.1:27017/capacity_connect
-   JWT_SECRET=capacity_connect_super_secret_jwt_key_sih_2026_imd_secure_token_987654321
+   MONGODB_URI=mongodb://127.0.0.1:27017/meghsetu
+   JWT_SECRET=meghsetu_super_secret_jwt_key_sih_2026_imd_secure_token_987654321
    NEXT_PUBLIC_APP_URL=http://localhost:3000
    ```
    *(Note: If a local or remote MongoDB instance is reachable at `MONGODB_URI`, Mongoose manages connections automatically. If MongoDB is not running locally, the built-in resilient data layer automatically persists all operations to `.data/store.json` so you can test 100% of features without database setup headaches!)*

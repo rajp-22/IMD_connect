@@ -20,6 +20,31 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: 'Prompt or message is required' }, { status: 400 });
     }
 
+    // If RAG query with document or source filter
+    if (body.documentId || body.sourceFilter || mode === 'rag') {
+      const { answerRAGQuery } = await import('@/lib/rag');
+      const ragResponse = await answerRAGQuery({
+        query: textPrompt,
+        sourceFilter: body.sourceFilter || (body.documentId ? 'pdf' : 'platform'),
+        documentId: body.documentId,
+        conversationHistory: body.conversationHistory || body.history || [],
+      });
+
+      return NextResponse.json({
+        success: true,
+        response: {
+          message: ragResponse.answer,
+          citations: ragResponse.citations.map((c) => ({
+            sourceDocument: c.sourceDocument,
+            sectionTitle: `${c.sectionTitle || 'Section'} (p. ${c.pageNumber})`,
+            snippet: c.snippet,
+          })),
+          suggestedFollowups: ragResponse.suggestedFollowups,
+          providerUsed: ragResponse.providerUsed,
+        },
+      });
+    }
+
     const aiResponse = await askCapacityAI({
       prompt: textPrompt,
       contextType: contextType || 'general',
