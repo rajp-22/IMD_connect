@@ -56,38 +56,38 @@ export interface IRealtimeWeatherResponse {
 }
 
 export const MAJOR_INDIA_CITIES: ICityWeatherLocation[] = [
-  // NORTH
-  { id: 'delhi', name: 'Delhi', state: 'NCT Delhi', region: 'NORTH', lat: 28.6139, lng: 77.2090, x: 42, y: 31, isKeyStation: true },
-  { id: 'srinagar', name: 'Srinagar', state: 'Jammu & Kashmir', region: 'NORTH', lat: 34.0837, lng: 74.7973, x: 33, y: 13, isKeyStation: true },
-  { id: 'chandigarh', name: 'Chandigarh', state: 'Punjab / Haryana', region: 'NORTH', lat: 30.7333, lng: 76.7794, x: 39, y: 24, isKeyStation: false },
-  { id: 'jaipur', name: 'Jaipur', state: 'Rajasthan', region: 'NORTH', lat: 26.9124, lng: 75.7873, x: 35, y: 36, isKeyStation: true },
-  { id: 'lucknow', name: 'Lucknow', state: 'Uttar Pradesh', region: 'NORTH', lat: 26.8467, lng: 80.9462, x: 53, y: 37, isKeyStation: true },
+  // NORTH & HIMALAYAS
+  { id: 'delhi', name: 'Delhi', state: 'NCT Delhi', region: 'NORTH', lat: 28.6139, lng: 77.2090, x: 32.5, y: 30.5, isKeyStation: true },
+  { id: 'srinagar', name: 'Srinagar', state: 'Jammu & Kashmir', region: 'NORTH', lat: 34.0837, lng: 74.7973, x: 25.1, y: 13.8, isKeyStation: true },
+  { id: 'chandigarh', name: 'Chandigarh', state: 'Punjab / Haryana', region: 'NORTH', lat: 30.7333, lng: 76.7794, x: 31.2, y: 24.0, isKeyStation: false },
+  { id: 'jaipur', name: 'Jaipur', state: 'Rajasthan', region: 'NORTH', lat: 26.9124, lng: 75.7873, x: 28.1, y: 35.6, isKeyStation: true },
+  { id: 'lucknow', name: 'Lucknow', state: 'Uttar Pradesh', region: 'NORTH', lat: 26.8467, lng: 80.9462, x: 44.0, y: 35.8, isKeyStation: true },
 
   // WEST
-  { id: 'mumbai', name: 'Mumbai', state: 'Maharashtra', region: 'WEST', lat: 19.0760, lng: 72.8777, x: 27, y: 60, isKeyStation: true },
-  { id: 'pune', name: 'Pune', state: 'Maharashtra', region: 'WEST', lat: 18.5204, lng: 73.8567, x: 32, y: 63, isKeyStation: true },
-  { id: 'ahmedabad', name: 'Ahmedabad', state: 'Gujarat', region: 'WEST', lat: 23.0225, lng: 72.5714, x: 26, y: 46, isKeyStation: true },
-  { id: 'surat', name: 'Surat', state: 'Gujarat', region: 'WEST', lat: 21.1702, lng: 72.8311, x: 27, y: 53, isKeyStation: false },
+  { id: 'mumbai', name: 'Mumbai', state: 'Maharashtra', region: 'WEST', lat: 19.0760, lng: 72.8777, x: 19.2, y: 59.5, isKeyStation: true },
+  { id: 'pune', name: 'Pune', state: 'Maharashtra', region: 'WEST', lat: 18.5204, lng: 73.8567, x: 22.2, y: 61.2, isKeyStation: true },
+  { id: 'ahmedabad', name: 'Ahmedabad', state: 'Gujarat', region: 'WEST', lat: 23.0225, lng: 72.5714, x: 18.2, y: 47.5, isKeyStation: true },
+  { id: 'surat', name: 'Surat', state: 'Gujarat', region: 'WEST', lat: 21.1702, lng: 72.8311, x: 19.0, y: 53.1, isKeyStation: false },
 
   // CENTRAL
-  { id: 'bhopal', name: 'Bhopal', state: 'Madhya Pradesh', region: 'CENTRAL', lat: 23.2599, lng: 77.4126, x: 44, y: 47, isKeyStation: true },
-  { id: 'nagpur', name: 'Nagpur', state: 'Maharashtra', region: 'CENTRAL', lat: 21.1458, lng: 79.0882, x: 48, y: 54, isKeyStation: true },
-  { id: 'indore', name: 'Indore', state: 'Madhya Pradesh', region: 'CENTRAL', lat: 22.7196, lng: 75.8577, x: 38, y: 49, isKeyStation: false },
+  { id: 'bhopal', name: 'Bhopal', state: 'Madhya Pradesh', region: 'CENTRAL', lat: 23.2599, lng: 77.4126, x: 33.1, y: 46.8, isKeyStation: true },
+  { id: 'nagpur', name: 'Nagpur', state: 'Maharashtra', region: 'CENTRAL', lat: 21.1458, lng: 79.0882, x: 38.3, y: 53.2, isKeyStation: true },
+  { id: 'indore', name: 'Indore', state: 'Madhya Pradesh', region: 'CENTRAL', lat: 22.7196, lng: 75.8577, x: 28.3, y: 48.4, isKeyStation: false },
 
   // SOUTH
-  { id: 'bengaluru', name: 'Bengaluru', state: 'Karnataka', region: 'SOUTH', lat: 12.9716, lng: 77.5946, x: 43, y: 78, isKeyStation: true },
-  { id: 'hyderabad', name: 'Hyderabad', state: 'Telangana', region: 'SOUTH', lat: 17.3850, lng: 78.4867, x: 47, y: 66, isKeyStation: true },
-  { id: 'chennai', name: 'Chennai', state: 'Tamil Nadu', region: 'SOUTH', lat: 13.0827, lng: 80.2707, x: 53, y: 77, isKeyStation: true },
-  { id: 'kochi', name: 'Kochi', state: 'Kerala', region: 'SOUTH', lat: 9.9312, lng: 76.2673, x: 38, y: 88, isKeyStation: true },
+  { id: 'bengaluru', name: 'Bengaluru', state: 'Karnataka', region: 'SOUTH', lat: 12.9716, lng: 77.5946, x: 33.7, y: 78.1, isKeyStation: true },
+  { id: 'hyderabad', name: 'Hyderabad', state: 'Telangana', region: 'SOUTH', lat: 17.3850, lng: 78.4867, x: 36.4, y: 64.7, isKeyStation: true },
+  { id: 'chennai', name: 'Chennai', state: 'Tamil Nadu', region: 'SOUTH', lat: 13.0827, lng: 80.2707, x: 41.9, y: 77.8, isKeyStation: true },
+  { id: 'kochi', name: 'Kochi', state: 'Kerala', region: 'SOUTH', lat: 9.9312, lng: 76.2673, x: 29.6, y: 87.4, isKeyStation: true },
 
   // EAST
-  { id: 'kolkata', name: 'Kolkata', state: 'West Bengal', region: 'EAST', lat: 22.5726, lng: 88.3639, x: 74, y: 49, isKeyStation: true },
-  { id: 'bhubaneswar', name: 'Bhubaneswar', state: 'Odisha', region: 'EAST', lat: 20.2961, lng: 85.8245, x: 67, y: 56, isKeyStation: true },
-  { id: 'patna', name: 'Patna', state: 'Bihar', region: 'EAST', lat: 25.5941, lng: 85.1376, x: 64, y: 39, isKeyStation: true },
-  { id: 'ranchi', name: 'Ranchi', state: 'Jharkhand', region: 'EAST', lat: 23.3441, lng: 85.3096, x: 65, y: 46, isKeyStation: false },
+  { id: 'kolkata', name: 'Kolkata', state: 'West Bengal', region: 'EAST', lat: 22.5726, lng: 88.3639, x: 66.8, y: 48.9, isKeyStation: true },
+  { id: 'bhubaneswar', name: 'Bhubaneswar', state: 'Odisha', region: 'EAST', lat: 20.2961, lng: 85.8245, x: 59.0, y: 55.8, isKeyStation: true },
+  { id: 'patna', name: 'Patna', state: 'Bihar', region: 'EAST', lat: 25.5941, lng: 85.1376, x: 56.9, y: 39.7, isKeyStation: true },
+  { id: 'ranchi', name: 'Ranchi', state: 'Jharkhand', region: 'EAST', lat: 23.3441, lng: 85.3096, x: 57.4, y: 46.5, isKeyStation: false },
 
   // NORTHEAST
-  { id: 'guwahati', name: 'Guwahati', state: 'Assam', region: 'NORTHEAST', lat: 26.1445, lng: 91.7362, x: 84, y: 37, isKeyStation: true },
+  { id: 'guwahati', name: 'Guwahati', state: 'Assam', region: 'NORTHEAST', lat: 26.1445, lng: 91.7362, x: 77.2, y: 38.0, isKeyStation: true },
 ];
 
 export function getWindCompass(degrees: number): string {

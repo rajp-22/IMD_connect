@@ -28,6 +28,11 @@ import {
   IWeatherAlert,
   IRealtimeWeatherResponse,
 } from '@/lib/weather-service';
+import {
+  INDIA_MAINLAND_PATH,
+  INDIA_ISLANDS_PATH,
+  projectCoordinates,
+} from '@/lib/india-map-data';
 import GifIcon from '@/components/GifIcon';
 
 export type WeatherLayer = 'temperature' | 'rainfall' | 'wind' | 'pressure' | 'cloud';
@@ -379,16 +384,16 @@ export default function RealtimeIndiaWeatherMap({ compact = false }: RealtimeInd
 
         {/* SVG GEOGRAPHIC OUTLINE & ATMOSPHERIC METEOROLOGY */}
         <svg
-          viewBox="0 0 600 700"
-          className="w-full h-full max-h-[480px] p-2 drop-shadow-[0_0_20px_rgba(56,189,248,0.25)] select-none"
+          viewBox="0 0 600 680"
+          className="w-full h-full max-h-[490px] p-1.5 drop-shadow-[0_0_24px_rgba(56,189,248,0.25)] select-none"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
           <defs>
             <linearGradient id="mapFillGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-              <stop offset="0%" stopColor="#0b2e59" stopOpacity="0.45" />
-              <stop offset="50%" stopColor="#072040" stopOpacity="0.6" />
-              <stop offset="100%" stopColor="#04142b" stopOpacity="0.5" />
+              <stop offset="0%" stopColor="#0b2e59" stopOpacity="0.5" />
+              <stop offset="50%" stopColor="#072040" stopOpacity="0.65" />
+              <stop offset="100%" stopColor="#04142b" stopOpacity="0.55" />
             </linearGradient>
 
             <linearGradient id="windStream" x1="0%" y1="100%" x2="100%" y2="0%">
@@ -406,38 +411,32 @@ export default function RealtimeIndiaWeatherMap({ compact = false }: RealtimeInd
             </filter>
           </defs>
 
-          {/* Accurate Geographic Outline of India (Normalized coordinate frame) */}
+          {/* Authentic Geographic Mainland Outline of India */}
           <path
-            d="M 235,50 
-               L 260,70 L 290,75 L 305,100 L 335,120 L 370,125 L 400,130 L 460,150 L 490,185 L 465,205 
-               L 425,200 L 390,225 L 365,245 L 345,285 L 340,325 L 325,380 L 305,445 L 285,505 L 265,560 
-               L 245,605 L 225,560 L 210,505 L 195,450 L 180,390 L 165,355 L 140,335 L 120,315 L 100,295 
-               L 95,250 L 115,220 L 150,225 L 180,205 L 200,160 L 220,105 Z"
+            d={INDIA_MAINLAND_PATH}
             fill="url(#mapFillGradient)"
             stroke="#38bdf8"
-            strokeWidth="2.2"
+            strokeWidth="1.8"
             strokeLinejoin="round"
             className="filter drop-shadow-[0_0_10px_rgba(56,189,248,0.4)]"
           />
 
-          {/* Regional Administrative Boundaries (Discreet dashed borders) */}
-          <g stroke="#0284c7" strokeWidth="0.8" strokeDasharray="3 3" opacity="0.45">
-            {/* North-Central line */}
-            <path d="M 180,205 Q 260,220 365,245" />
-            {/* Deccan / Peninsular divider */}
-            <path d="M 140,335 Q 240,350 340,325" />
-            {/* Southern Peninsula */}
-            <path d="M 180,390 Q 245,420 325,380" />
-            {/* Northeast Corridor */}
-            <path d="M 390,225 L 425,200 L 490,185" />
-          </g>
+          {/* Authentic Islands (Andaman & Nicobar, Lakshadweep) */}
+          <path
+            d={INDIA_ISLANDS_PATH}
+            fill="url(#mapFillGradient)"
+            stroke="#38bdf8"
+            strokeWidth="1.4"
+            strokeLinejoin="round"
+            className="filter drop-shadow-[0_0_6px_rgba(56,189,248,0.35)]"
+          />
 
           {/* LAYER VISUALIZATION: WINDS */}
           {activeLayer === 'wind' && (
             <g>
-              {/* Southwest Arabian Sea Wind Jet Stream */}
+              {/* Southwest Arabian Sea Monsoon Jet Stream */}
               <path
-                d="M 60,560 C 130,490 190,420 250,350 C 310,290 380,240 480,210"
+                d="M 50,560 C 100,480 130,420 190,360 C 240,310 320,280 420,260"
                 stroke="url(#windStream)"
                 strokeWidth="2.8"
                 strokeDasharray="18 12"
@@ -445,21 +444,31 @@ export default function RealtimeIndiaWeatherMap({ compact = false }: RealtimeInd
                 className="animate-wind-flow"
               />
               <path
-                d="M 90,600 C 160,520 220,440 280,370 C 350,300 420,230 500,180"
+                d="M 70,610 C 120,530 160,450 220,390 C 280,330 360,290 460,250"
                 stroke="url(#windStream)"
                 strokeWidth="2.2"
                 strokeDasharray="14 10"
                 strokeLinecap="round"
                 className="animate-wind-flow-slow"
               />
-              {/* Bay of Bengal Curving Inflow */}
+              {/* Bay of Bengal Monsoon Branch curving to Northeast */}
               <path
-                d="M 380,500 C 360,430 350,360 370,300 C 390,240 430,200 470,170"
+                d="M 370,550 C 360,460 380,380 410,320 C 440,270 470,250 530,230"
                 stroke="#38bdf8"
                 strokeWidth="2"
                 strokeDasharray="12 8"
                 strokeLinecap="round"
-                opacity="0.8"
+                opacity="0.85"
+                className="animate-wind-flow"
+              />
+              {/* Himalayan Westerly High-Altitude Stream */}
+              <path
+                d="M 120,110 C 180,130 250,140 340,160"
+                stroke="#38bdf8"
+                strokeWidth="2"
+                strokeDasharray="10 6"
+                strokeLinecap="round"
+                opacity="0.75"
                 className="animate-wind-flow"
               />
             </g>
@@ -470,25 +479,25 @@ export default function RealtimeIndiaWeatherMap({ compact = false }: RealtimeInd
             <g className="animate-contour-drift">
               {/* 1008 hPa */}
               <path
-                d="M 70,300 C 140,360 210,430 270,510 C 330,430 410,350 510,290"
+                d="M 80,310 C 150,370 220,430 280,510 C 340,430 420,350 520,290"
                 stroke="#60a5fa"
                 strokeWidth="1.8"
                 strokeDasharray="6 4"
                 opacity="0.8"
               />
-              <text x="80" y="295" fill="#93c5fd" fontSize="10" fontFamily="monospace" fontWeight="bold">
+              <text x="85" y="305" fill="#93c5fd" fontSize="10" fontFamily="monospace" fontWeight="bold">
                 1008 hPa
               </text>
 
               {/* 1010 hPa */}
               <path
-                d="M 50,220 C 130,280 200,360 270,440 C 340,360 440,270 510,210"
+                d="M 60,230 C 140,290 210,370 280,450 C 350,370 450,280 520,220"
                 stroke="#38bdf8"
                 strokeWidth="1.4"
                 strokeDasharray="4 4"
                 opacity="0.7"
               />
-              <text x="60" y="215" fill="#38bdf8" fontSize="10" fontFamily="monospace" fontWeight="bold">
+              <text x="65" y="225" fill="#38bdf8" fontSize="10" fontFamily="monospace" fontWeight="bold">
                 1010 hPa
               </text>
             </g>
@@ -496,9 +505,10 @@ export default function RealtimeIndiaWeatherMap({ compact = false }: RealtimeInd
 
           {/* DYNAMIC CITY WEATHER MARKERS & VALUE CHIPS */}
           {matchingCities.map((city) => {
-            // Coordinate mapping to SVG frame (600x700)
-            const cx = (city.x / 100) * 600;
-            const cy = (city.y / 100) * 700;
+            // Coordinate mapping to authentic SVG frame (600x680)
+            const { x: cx, y: cy } = (city.lat && city.lng)
+              ? projectCoordinates(city.lng, city.lat)
+              : { x: (city.x / 100) * 600, y: (city.y / 100) * 680 };
 
             const isSelected = selectedCity?.id === city.id || defaultSelected?.id === city.id;
             const isHovered = hoveredCity?.id === city.id;
@@ -548,26 +558,26 @@ export default function RealtimeIndiaWeatherMap({ compact = false }: RealtimeInd
                 <circle cx={cx} cy={cy} r="2" fill="#ffffff" />
 
                 {/* City Name & Dynamic Metric Tag */}
-                <g transform={`translate(${cx + 9}, ${cy - 12})`}>
+                <g transform={`translate(${cx + 8}, ${cy - 10})`}>
                   {/* Glass Tag Background */}
                   <rect
                     x="0"
                     y="0"
-                    width={city.name.length * 6.5 + chipText.length * 7 + 16}
-                    height="19"
-                    rx="5"
-                    fill="rgba(6, 21, 43, 0.88)"
-                    stroke={isSelected ? '#38bdf8' : 'rgba(56, 189, 248, 0.35)'}
+                    width={city.name.length * 6.2 + chipText.length * 7 + 14}
+                    height="18"
+                    rx="4"
+                    fill="rgba(6, 21, 43, 0.9)"
+                    stroke={isSelected ? '#38bdf8' : 'rgba(56, 189, 248, 0.4)'}
                     strokeWidth={isSelected ? '1.4' : '0.8'}
                   />
 
                   {/* City Label */}
                   <text
-                    x="6"
-                    y="10"
+                    x="5"
+                    y="9.5"
                     dominantBaseline="central"
                     fill={isSelected ? '#ffffff' : '#e2e8f0'}
-                    fontSize="9.5"
+                    fontSize="9"
                     fontFamily="sans-serif"
                     fontWeight={isSelected ? 'bold' : '600'}
                   >
@@ -576,11 +586,11 @@ export default function RealtimeIndiaWeatherMap({ compact = false }: RealtimeInd
 
                   {/* Value Badge */}
                   <text
-                    x={city.name.length * 6.5 + 10}
-                    y="10"
+                    x={city.name.length * 6.2 + 8}
+                    y="9.5"
                     dominantBaseline="central"
                     fill={tempColors.text}
-                    fontSize="9.5"
+                    fontSize="9"
                     fontFamily="monospace"
                     fontWeight="bold"
                   >
@@ -593,30 +603,37 @@ export default function RealtimeIndiaWeatherMap({ compact = false }: RealtimeInd
         </svg>
 
         {/* COMPACT HOVER TOOLTIP */}
-        {hoveredCity && (
-          <div
-            className="absolute z-30 pointer-events-none bg-slate-950/95 backdrop-blur-md border border-cyan-400/80 rounded-xl p-3 shadow-2xl text-xs space-y-1 w-48 animate-in fade-in zoom-in-95 duration-100"
-            style={{
-              left: `${Math.min(75, Math.max(15, hoveredCity.x))}%`,
-              top: `${Math.min(75, Math.max(15, hoveredCity.y - 12))}%`,
-              transform: 'translate(-50%, -100%)',
-            }}
-          >
-            <div className="flex items-center justify-between border-b border-slate-800 pb-1">
-              <span className="font-bold text-white text-sm">{hoveredCity.name}</span>
-              <span className="text-cyan-300 font-mono font-extrabold text-sm">
-                {hoveredCity.temperature}°C
-              </span>
+        {hoveredCity && (() => {
+          const { x: cx, y: cy } = (hoveredCity.lat && hoveredCity.lng)
+            ? projectCoordinates(hoveredCity.lng, hoveredCity.lat)
+            : { x: (hoveredCity.x / 100) * 600, y: (hoveredCity.y / 100) * 680 };
+          const leftPercent = Math.min(80, Math.max(20, (cx / 600) * 100));
+          const topPercent = Math.min(80, Math.max(15, (cy / 680) * 100));
+          return (
+            <div
+              className="absolute z-30 pointer-events-none bg-slate-950/95 backdrop-blur-md border border-cyan-400/80 rounded-xl p-3 shadow-2xl text-xs space-y-1 w-48 animate-in fade-in zoom-in-95 duration-100"
+              style={{
+                left: `${leftPercent}%`,
+                top: `${topPercent}%`,
+                transform: 'translate(-50%, -100%)',
+              }}
+            >
+              <div className="flex items-center justify-between border-b border-slate-800 pb-1">
+                <span className="font-bold text-white text-sm">{hoveredCity.name}</span>
+                <span className="text-cyan-300 font-mono font-extrabold text-sm">
+                  {hoveredCity.temperature}°C
+                </span>
+              </div>
+              <p className="text-[11px] text-slate-300 font-medium">{hoveredCity.condition}</p>
+              <div className="grid grid-cols-2 gap-1 text-[10px] text-slate-400 pt-1 font-mono">
+                <span>RH: {hoveredCity.relativeHumidity}%</span>
+                <span>Wind: {hoveredCity.windSpeed} km/h {hoveredCity.windDirectionCompass}</span>
+                <span>Rain: {hoveredCity.precipitation} mm</span>
+                <span>Pressure: {hoveredCity.pressureMsl} hPa</span>
+              </div>
             </div>
-            <p className="text-[11px] text-slate-300 font-medium">{hoveredCity.condition}</p>
-            <div className="grid grid-cols-2 gap-1 text-[10px] text-slate-400 pt-1 font-mono">
-              <span>RH: {hoveredCity.relativeHumidity}%</span>
-              <span>Wind: {hoveredCity.windSpeed} km/h {hoveredCity.windDirectionCompass}</span>
-              <span>Rain: {hoveredCity.precipitation} mm</span>
-              <span>Pressure: {hoveredCity.pressureMsl} hPa</span>
-            </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* MAP ZOOM CONTROLS */}
         <div className="absolute top-4 left-4 z-20 flex flex-col gap-1.5 bg-slate-950/80 backdrop-blur-md p-1 rounded-xl border border-slate-800">
